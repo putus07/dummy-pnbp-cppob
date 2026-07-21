@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kalkulator PNBP - Izin Penerapan CPPOB (Dummy)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/dist/tabler-icons.min.css">
+<style>
+  :root{
+    --surface-0:#f4f5f7;
+    --surface-1:#f0f1f4;
+    --surface-2:#ffffff;
+    --border:#e2e4e9;
+    --border-strong:#c9cdd6;
+    --text-primary:#16181d;
+    --text-secondary:#5b606b;
+    --text-muted:#8b909b;
+    --accent-bg:#e7edfd;
+    --accent-text:#1d4ed8;
+    --accent-border:#2f5fe0;
+    --warning-border:#f0b429;
+    --warning-text:#8a5a00;
+    --radius:8px;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--surface-0);
+    color:var(--text-primary);
+    padding:32px 16px 64px;
+  }
+  .page{
+    max-width:1080px;
+    margin:0 auto;
+  }
+  .banner{
+    background:#111827;
+    color:#fff;
+    border-radius:12px;
+    padding:24px 28px;
+    margin-bottom:24px;
+  }
+  .banner p.tag{
+    font-size:12px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:#9ca3af;
+    margin:0 0 6px;
+  }
+  .banner h1{
+    font-size:22px;
+    font-weight:600;
+    margin:0 0 6px;
+  }
+  .banner p.sub{
+    font-size:13px;
+    color:#c7cad1;
+    margin:0;
+  }
+  .layout{
+    display:grid;
+    grid-template-columns:1.35fr 1fr;
+    gap:20px;
+    align-items:start;
+  }
+  @media (max-width:840px){
+    .layout{grid-template-columns:1fr;}
+  }
+  .card{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:20px;
+    margin-bottom:16px;
+  }
+  .card h2{
+    font-size:15px;
+    font-weight:600;
+    margin:0 0 2px;
+  }
+  .card .desc{
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin:0 0 16px;
+  }
+  .group-label{
+    font-size:12.5px;
+    color:var(--text-secondary);
+    margin:0 0 6px;
+    font-weight:500;
+  }
+  .opt-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .opt{
+    flex:1;
+    min-width:110px;
+    text-align:center;
+    font-size:13px;
+    border:1px solid var(--border);
+    padding:9px 6px;
+    border-radius:var(--radius);
+    cursor:pointer;
+    user-select:none;
+    transition:all .12s ease;
+  }
+  .opt:hover{border-color:var(--border-strong);}
+  .opt.active{
+    border-color:var(--accent-border);
+    background:var(--accent-bg);
+    color:var(--accent-text);
+    font-weight:500;
+  }
+  select, input[type=text]{
+    width:100%;
+    height:38px;
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:0 10px;
+    font-size:13px;
+    background:#fff;
+    color:var(--text-primary);
+  }
+  select:focus, input[type=text]:focus{
+    outline:none;
+    border-color:var(--accent-border);
+    box-shadow:0 0 0 3px var(--accent-bg);
+  }
+  button{
+    border:1px solid var(--border-strong);
+    background:#fff;
+    border-radius:var(--radius);
+    padding:8px 14px;
+    font-size:13px;
+    cursor:pointer;
+    color:var(--text-primary);
+  }
+  button:hover{background:var(--surface-1);}
+  button.primary{
+    background:#111827;
+    color:#fff;
+    border-color:#111827;
+  }
+  button.primary:hover{background:#1f2937;}
+  .row-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:4px;
+  }
+  .rows-container{
+    margin-top:14px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .loc-card{
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    padding:12px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .loc-card.dup{border-color:var(--warning-border);}
+  .loc-top{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .icon-btn{
+    padding:8px 10px;
+    flex-shrink:0;
+  }
+  .dup-tag{
+    font-size:11.5px;
+    color:var(--warning-text);
+    margin:0;
+  }
+  .kat-label{
+    font-size:11.5px;
+    color:var(--text-muted);
+    margin:2px 0 0;
+  }
+  .search-wrap{position:relative;}
+  .suggest-box{
+    position:absolute;
+    top:100%;
+    left:0;
+    right:0;
+    background:#fff;
+    border:1px solid var(--border-strong);
+    border-radius:var(--radius);
+    margin-top:4px;
+    max-height:180px;
+    overflow:auto;
+    z-index:20;
+    display:none;
+    box-shadow:0 8px 20px rgba(0,0,0,0.08);
+  }
+  .suggest-item{
+    padding:9px 12px;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .suggest-item:hover{background:var(--surface-1);}
+  .chip-line{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .chip-badge{
+    font-size:12px;
+    background:var(--accent-bg);
+    color:var(--accent-text);
+    padding:7px 10px;
+    border-radius:var(--radius);
+    flex-shrink:0;
+    white-space:nowrap;
+  }
+  .result-box{
+    background:var(--surface-1);
+    border-radius:var(--radius);
+    padding:14px;
+    margin-bottom:10px;
+  }
+  .result-box .label{
+    font-size:11px;
+    color:var(--text-muted);
+    margin:0 0 4px;
+  }
+  .result-box .value{
+    font-size:23px;
+    font-weight:600;
+    margin:0;
+  }
+  .result-box .value.small{font-size:14px;}
+  .result-box .detail{
+    font-size:11.5px;
+    color:var(--text-muted);
+    margin:6px 0 0;
+  }
+  .info-head{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin-bottom:4px;
+  }
+  .info-head i{color:var(--text-secondary);font-size:16px;}
+  .info-head p{font-size:13.5px;font-weight:600;margin:0;}
+  .info-list div{
+    font-size:12.5px;
+    color:var(--text-secondary);
+    border-top:1px solid var(--border);
+    padding-top:6px;
+    margin-top:6px;
+  }
+  .badge-note{
+    display:inline-block;
+    font-size:11px;
+    background:#fef3c7;
+    color:#92400e;
+    padding:3px 8px;
+    border-radius:6px;
+    margin-left:8px;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="banner">
+    <p class="tag">Dummy / prototipe internal</p>
+    <h1>Kalkulator PNBP - Izin Penerapan CPPOB<span class="badge-note">Data belum final</span></h1>
+    <p class="sub">Simulasi tampilan dan alur perhitungan PNBP mengacu PP 15/2026. Seluruh data lokasi, proses produksi, kategori pangan, dan tarif pada halaman ini masih data uji coba.</p>
+  </div>
+
+  <div class="layout">
+
+    <div>
+      <div class="card">
+        <h2>Data izin</h2>
+        <p class="desc">Berlaku untuk seluruh permohonan</p>
+
+        <p class="group-label">Tipe permohonan</p>
+        <div class="opt-row" id="tipe-group">
+          <div class="opt" data-group="tipe" data-val="pendaftaran">IP CPPOB pendaftaran</div>
+          <div class="opt" data-group="tipe" data-val="ekspor">IP CPPOB ekspor</div>
+        </div>
+
+        <p class="group-label">Skala usaha</p>
+        <div class="opt-row" id="skala-group">
+          <div class="opt" data-group="skala" data-val="mikro">Mikro</div>
+          <div class="opt" data-group="skala" data-val="kecil">Kecil</div>
+          <div class="opt" data-group="skala" data-val="menengah">Menengah</div>
+          <div class="opt" data-group="skala" data-val="besar">Besar</div>
+        </div>
+
+        <p class="group-label">Jenis permohonan</p>
+        <div class="opt-row" id="jenis-group" style="margin-bottom:0;">
+          <div class="opt" data-group="jenis" data-val="baru">Baru</div>
+          <div class="opt" data-group="jenis" data-val="perpanjangan">Perpanjangan</div>
+          <div class="opt" data-group="jenis" data-val="teknis">Perubahan teknis</div>
+          <div class="opt" data-group="jenis" data-val="administrasi">Perubahan administrasi</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:0;">
+        <div class="row-header">
+          <div>
+            <h2>Lokasi dan proses produksi</h2>
+            <p class="desc" style="margin-bottom:0;">Tiap kombinasi unik lokasi + proses = 1 unit biaya</p>
+          </div>
+          <button id="add-row"><i class="ti ti-plus" style="margin-right:4px;"></i>Tambah</button>
+        </div>
+        <div class="rows-container" id="rows-container"></div>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <p class="desc" style="margin-bottom:12px;">Estimasi PNBP</p>
+        <div class="result-box">
+          <p class="label">Total tarif</p>
+          <p class="value" id="total-value">Rp -</p>
+          <p class="detail" id="total-detail">Lengkapi data izin dan lokasi</p>
+        </div>
+        <div class="result-box" style="margin-bottom:0;">
+          <p class="label">UPT / unit pemeriksa</p>
+          <p class="value small" id="upt-value">-</p>
+          <p class="detail" id="upt-detail">Pilih tipe permohonan</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="info-head"><i class="ti ti-list-check"></i><p>Komponen perhitungan biaya</p></div>
+        <p class="desc" style="margin-bottom:0;">Biaya dihitung berdasarkan 3 komponen utama</p>
+        <div class="info-list">
+          <div>Lorem ipsum dolor sit amet consectetur adipiscing elit</div>
+          <div>Lorem ipsum dolor sit amet consectetur</div>
+          <div>Lorem ipsum dolor sit amet</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="info-head"><i class="ti ti-adjustments"></i><p>Variabel yang memengaruhi biaya</p></div>
+        <p class="desc" style="margin-bottom:0;">Setiap variabel berdampak pada total estimasi</p>
+        <div class="info-list">
+          <div>1&nbsp;&nbsp;Lorem ipsum dolor sit amet consectetur</div>
+          <div>2&nbsp;&nbsp;Lorem ipsum dolor sit amet</div>
+          <div>3&nbsp;&nbsp;Lorem ipsum dolor sit amet consectetur elit</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:0;">
+        <div class="info-head"><i class="ti ti-scale"></i><p>Acuan regulasi</p></div>
+        <p class="desc" style="margin-bottom:0;">Dasar hukum perhitungan tarif</p>
+        <div class="info-list">
+          <div>PP 15/2026 - lorem ipsum dolor sit amet consectetur adipiscing elit, sed do eiusmod tempor incididunt.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <p style="text-align:center;font-size:11.5px;color:var(--text-muted);margin-top:24px;">
+    Direktorat Pengawasan Produksi Pangan Olahan - BPOM &middot; Halaman dummy untuk keperluan uji coba internal
+  </p>
+</div>
+
+<script>
+(function(){
+  var tarif = {
+    besar: {baru:3000000, perpanjangan:2000000, teknis:1000000, administrasi:0},
+    menengah: {baru:1000000, perpanjangan:750000, teknis:500000, administrasi:0},
+    kecil: {baru:0, perpanjangan:0, teknis:0, administrasi:0},
+    mikro: {baru:0, perpanjangan:0, teknis:0, administrasi:0}
+  };
+  var skalaLabel = {besar:"Besar", menengah:"Menengah", kecil:"Kecil", mikro:"Mikro"};
+  var jenisLabel = {baru:"Baru", perpanjangan:"Perpanjangan", teknis:"Perubahan teknis", administrasi:"Perubahan administrasi"};
+
+  var lokasiOpts = ["Bandung", "Surabaya", "Jakarta", "Bekasi"];
+  var uptMap = {"Bandung":"BBPOM di Bandung", "Surabaya":"BBPOM di Surabaya", "Jakarta":"BBPOM di Jakarta", "Bekasi":"BBPOM di Bandung"};
+  var prosesOpts = ["Sterilisasi", "Pasteurisasi", "Pemanggangan", "Mixing"];
+  var katpangOpts = ["Susu", "Daging Olahan", "Biskuit"];
+
+  var rows = [];
+  var rowIdCounter = 0;
+
+  document.querySelectorAll('.opt').forEach(function(el){
+    el.addEventListener('click', function(){
+      var group = el.getAttribute('data-group');
+      document.querySelectorAll('.opt[data-group="'+group+'"]').forEach(function(o){ o.classList.remove('active'); });
+      el.classList.add('active');
+      el.dataset.selected = 'true';
+      recalc();
+    });
+  });
+
+  function getSelected(group){
+    var el = document.querySelector('.opt[data-group="'+group+'"].active');
+    return el ? el.getAttribute('data-val') : null;
+  }
+
+  function addRow(){
+    rowIdCounter++;
+    rows.push({id: rowIdCounter, lokasi: '', proses: '', kategori: []});
+    render();
+  }
+
+  function removeRow(id){
+    rows = rows.filter(function(r){ return r.id !== id; });
+    render();
+  }
+
+  function render(){
+    var container = document.getElementById('rows-container');
+    container.innerHTML = '';
+    if(rows.length === 0){
+      var empty = document.createElement('p');
+      empty.style.cssText = 'font-size:12.5px;color:var(--text-muted);margin:0;';
+      empty.textContent = 'Belum ada lokasi. Klik tambah untuk mulai.';
+      container.appendChild(empty);
+    }
+    rows.forEach(function(row, idx){
+      var isDup = rows.slice(0, idx).some(function(r){ return r.lokasi && r.proses && r.lokasi === row.lokasi && r.proses === row.proses; });
+      var card = document.createElement('div');
+      card.className = 'loc-card' + (isDup ? ' dup' : '');
+
+      var top = document.createElement('div');
+      top.className = 'loc-top';
+
+      var lokSel = document.createElement('select');
+      lokSel.innerHTML = '<option value="">Pilih lokasi</option>' + lokasiOpts.map(function(o){ return '<option' + (row.lokasi === o ? ' selected' : '') + '>' + o + '</option>'; }).join('');
+      lokSel.addEventListener('change', function(){ row.lokasi = lokSel.value; render(); });
+
+      var prosSel = document.createElement('select');
+      prosSel.innerHTML = '<option value="">Pilih proses produksi</option>' + prosesOpts.map(function(o){ return '<option' + (row.proses === o ? ' selected' : '') + '>' + o + '</option>'; }).join('');
+      prosSel.addEventListener('change', function(){ row.proses = prosSel.value; render(); });
+
+      var delBtn = document.createElement('button');
+      delBtn.className = 'icon-btn';
+      delBtn.innerHTML = '<i class="ti ti-trash"></i>';
+      delBtn.title = 'Hapus baris';
+      delBtn.addEventListener('click', function(){ removeRow(row.id); });
+
+      top.appendChild(lokSel);
+      top.appendChild(prosSel);
+      top.appendChild(delBtn);
+      card.appendChild(top);
+
+      if(isDup){
+        var tag = document.createElement('p');
+        tag.className = 'dup-tag';
+        tag.textContent = 'Kombinasi ini sudah ada di atas - tidak dihitung ulang';
+        card.appendChild(tag);
+      }
+
+      var katLabel = document.createElement('p');
+      katLabel.className = 'kat-label';
+      katLabel.textContent = 'Kategori pangan pada lokasi ini';
+      card.appendChild(katLabel);
+
+      var searchWrap = document.createElement('div');
+      searchWrap.className = 'search-wrap';
+      var searchInput = document.createElement('input');
+      searchInput.type = 'text';
+      searchInput.placeholder = 'Cari kategori pangan, mis. susu, biskuit...';
+      var suggestBox = document.createElement('div');
+      suggestBox.className = 'suggest-box';
+
+      function updateSuggestions(){
+        var q = searchInput.value.trim().toLowerCase();
+        var already = row.kategori.map(function(k){ return k.name; });
+        var matches = katpangOpts.filter(function(o){ return already.indexOf(o) === -1 && o.toLowerCase().indexOf(q) !== -1; });
+        suggestBox.innerHTML = '';
+        if(q.length === 0 || matches.length === 0){
+          suggestBox.style.display = 'none';
+          return;
+        }
+        matches.slice(0, 8).forEach(function(m){
+          var item = document.createElement('div');
+          item.className = 'suggest-item';
+          item.textContent = m;
+          item.addEventListener('click', function(){
+            row.kategori.push({name: m, catatan: ''});
+            searchInput.value = '';
+            suggestBox.style.display = 'none';
+            render();
+          });
+          suggestBox.appendChild(item);
+        });
+        suggestBox.style.display = 'block';
+      }
+      searchInput.addEventListener('input', updateSuggestions);
+      searchInput.addEventListener('focus', updateSuggestions);
+      document.addEventListener('click', function(e){
+        if(!searchWrap.contains(e.target)) suggestBox.style.display = 'none';
+      });
+
+      searchWrap.appendChild(searchInput);
+      searchWrap.appendChild(suggestBox);
+      card.appendChild(searchWrap);
+
+      if(row.kategori.length > 0){
+        var chipsWrap = document.createElement('div');
+        chipsWrap.style.cssText = 'display:flex;flex-direction:column;gap:6px;';
+        row.kategori.forEach(function(k, kIdx){
+          var line = document.createElement('div');
+          line.className = 'chip-line';
+
+          var badge = document.createElement('span');
+          badge.className = 'chip-badge';
+          badge.textContent = k.name;
+
+          var note = document.createElement('input');
+          note.type = 'text';
+          note.placeholder = 'Catatan untuk ' + k.name + ' (opsional)';
+          note.style.flex = '1';
+          note.value = k.catatan;
+          note.addEventListener('input', function(){ k.catatan = note.value; });
+
+          var rm = document.createElement('button');
+          rm.className = 'icon-btn';
+          rm.innerHTML = '<i class="ti ti-x"></i>';
+          rm.title = 'Hapus ' + k.name;
+          rm.addEventListener('click', function(){ row.kategori.splice(kIdx, 1); render(); });
+
+          line.appendChild(badge);
+          line.appendChild(note);
+          line.appendChild(rm);
+          chipsWrap.appendChild(line);
+        });
+        card.appendChild(chipsWrap);
+      }
+
+      container.appendChild(card);
+    });
+    recalc();
+  }
+
+  function recalc(){
+    var skala = getSelected('skala');
+    var jenis = getSelected('jenis');
+    var tipe = getSelected('tipe');
+    var totalVal = document.getElementById('total-value');
+    var totalDet = document.getElementById('total-detail');
+    var uptVal = document.getElementById('upt-value');
+    var uptDet = document.getElementById('upt-detail');
+
+    var uniqueCombos = [];
+    rows.forEach(function(r){
+      if(r.lokasi && r.proses){
+        var key = r.lokasi + '|' + r.proses;
+        if(uniqueCombos.indexOf(key) === -1) uniqueCombos.push(key);
+      }
+    });
+
+    if(!skala || !jenis){
+      totalDet.textContent = 'Lengkapi skala usaha dan jenis permohonan';
+      totalVal.textContent = 'Rp -';
+    } else if(uniqueCombos.length === 0){
+      totalDet.textContent = 'Lengkapi minimal satu baris lokasi dan proses produksi';
+      totalVal.textContent = 'Rp -';
+    } else {
+      var unit = tarif[skala][jenis];
+      var total = unit * uniqueCombos.length;
+      totalVal.textContent = 'Rp ' + total.toLocaleString('id-ID');
+      totalDet.textContent = uniqueCombos.length + ' kombinasi unik x Rp ' + unit.toLocaleString('id-ID') + ' (' + skalaLabel[skala] + ', ' + jenisLabel[jenis] + ')';
+    }
+
+    if(tipe){
+      if(tipe === 'ekspor'){
+        uptVal.textContent = 'Direktorat Pengawasan Produksi Pangan Olahan';
+        uptDet.textContent = 'Tetap - tipe permohonan ekspor';
+      } else {
+        var uptSet = [];
+        rows.forEach(function(r){
+          if(r.lokasi && uptMap[r.lokasi] && uptSet.indexOf(uptMap[r.lokasi]) === -1) uptSet.push(uptMap[r.lokasi]);
+        });
+        uptVal.textContent = uptSet.length ? uptSet.join(', ') : 'Menunggu lokasi dipilih';
+        uptDet.textContent = 'Menyesuaikan tiap lokasi pabrik';
+      }
+    }
+  }
+
+  document.getElementById('add-row').addEventListener('click', addRow);
+  addRow();
+})();
+</script>
+</body>
+</html>
