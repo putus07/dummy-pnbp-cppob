@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalkulator PNBP - Izin Penerapan CPPOB (Dummy)</title>
+<title>Kalkulator Biaya Layanan PNBP - Direktorat Pengawasan Produksi Pangan Olahan (Dummy)</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/dist/tabler-icons.min.css">
 <style>
   :root{
@@ -24,250 +24,51 @@
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
   }
   *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--surface-0);
-    color:var(--text-primary);
-    padding:32px 16px 64px;
-  }
-  .page{
-    max-width:1080px;
-    margin:0 auto;
-  }
-  .banner{
-    background:#111827;
-    color:#fff;
-    border-radius:12px;
-    padding:24px 28px;
-    margin-bottom:24px;
-  }
-  .banner p.tag{
-    font-size:12px;
-    letter-spacing:0.04em;
-    text-transform:uppercase;
-    color:#9ca3af;
-    margin:0 0 6px;
-  }
-  .banner h1{
-    font-size:22px;
-    font-weight:600;
-    margin:0 0 6px;
-  }
-  .banner p.sub{
-    font-size:13px;
-    color:#c7cad1;
-    margin:0;
-  }
-  .layout{
-    display:grid;
-    grid-template-columns:1.35fr 1fr;
-    gap:20px;
-    align-items:start;
-  }
-  @media (max-width:840px){
-    .layout{grid-template-columns:1fr;}
-  }
-  .card{
-    background:var(--surface-2);
-    border:1px solid var(--border);
-    border-radius:12px;
-    padding:20px;
-    margin-bottom:16px;
-  }
-  .card h2{
-    font-size:15px;
-    font-weight:600;
-    margin:0 0 2px;
-  }
-  .card .desc{
-    font-size:12.5px;
-    color:var(--text-muted);
-    margin:0 0 16px;
-  }
-  .group-label{
-    font-size:12.5px;
-    color:var(--text-secondary);
-    margin:0 0 6px;
-    font-weight:500;
-  }
-  .opt-row{
-    display:flex;
-    gap:8px;
-    margin-bottom:16px;
-    flex-wrap:wrap;
-  }
-  .opt{
-    flex:1;
-    min-width:110px;
-    text-align:center;
-    font-size:13px;
-    border:1px solid var(--border);
-    padding:9px 6px;
-    border-radius:var(--radius);
-    cursor:pointer;
-    user-select:none;
-    transition:all .12s ease;
-  }
+  body{margin:0;background:var(--surface-0);color:var(--text-primary);padding:32px 16px 64px;}
+  .page{max-width:1080px;margin:0 auto;}
+  .banner{background:#111827;color:#fff;border-radius:12px;padding:24px 28px;margin-bottom:24px;}
+  .banner p.tag{font-size:12px;letter-spacing:0.04em;text-transform:uppercase;color:#9ca3af;margin:0 0 6px;}
+  .banner h1{font-size:22px;font-weight:600;margin:0 0 6px;}
+  .banner p.sub{font-size:13px;color:#c7cad1;margin:0;}
+  .layout{display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start;}
+  @media (max-width:840px){.layout{grid-template-columns:1fr;}}
+  .card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
+  .card h2{font-size:15px;font-weight:600;margin:0 0 2px;}
+  .card .desc{font-size:12.5px;color:var(--text-muted);margin:0 0 16px;}
+  .group-label{font-size:12.5px;color:var(--text-secondary);margin:0 0 6px;font-weight:500;}
+  .opt-row{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+  .opt{flex:1;min-width:110px;text-align:center;font-size:13px;border:1px solid var(--border);padding:9px 6px;border-radius:var(--radius);cursor:pointer;user-select:none;transition:all .12s ease;}
   .opt:hover{border-color:var(--border-strong);}
-  .opt.active{
-    border-color:var(--accent-border);
-    background:var(--accent-bg);
-    color:var(--accent-text);
-    font-weight:500;
-  }
-  select, input[type=text]{
-    width:100%;
-    height:38px;
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:0 10px;
-    font-size:13px;
-    background:#fff;
-    color:var(--text-primary);
-  }
-  select:focus, input[type=text]:focus{
-    outline:none;
-    border-color:var(--accent-border);
-    box-shadow:0 0 0 3px var(--accent-bg);
-  }
-  button{
-    border:1px solid var(--border-strong);
-    background:#fff;
-    border-radius:var(--radius);
-    padding:8px 14px;
-    font-size:13px;
-    cursor:pointer;
-    color:var(--text-primary);
-  }
+  .opt.active{border-color:var(--accent-border);background:var(--accent-bg);color:var(--accent-text);font-weight:500;}
+  select, input[type=text]{width:100%;height:38px;border:1px solid var(--border);border-radius:var(--radius);padding:0 10px;font-size:13px;background:#fff;color:var(--text-primary);}
+  select:focus, input[type=text]:focus{outline:none;border-color:var(--accent-border);box-shadow:0 0 0 3px var(--accent-bg);}
+  button{border:1px solid var(--border-strong);background:#fff;border-radius:var(--radius);padding:8px 14px;font-size:13px;cursor:pointer;color:var(--text-primary);}
   button:hover{background:var(--surface-1);}
-  button.primary{
-    background:#111827;
-    color:#fff;
-    border-color:#111827;
-  }
-  button.primary:hover{background:#1f2937;}
-  .row-header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:4px;
-  }
-  .rows-container{
-    margin-top:14px;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-  .loc-card{
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    padding:12px;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
+  .row-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .rows-container{margin-top:14px;display:flex;flex-direction:column;gap:10px;}
+  .loc-card{border:1px solid var(--border);border-radius:var(--radius);padding:12px;display:flex;flex-direction:column;gap:8px;}
   .loc-card.dup{border-color:var(--warning-border);}
-  .loc-top{
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .icon-btn{
-    padding:8px 10px;
-    flex-shrink:0;
-  }
-  .dup-tag{
-    font-size:11.5px;
-    color:var(--warning-text);
-    margin:0;
-  }
-  .kat-label{
-    font-size:11.5px;
-    color:var(--text-muted);
-    margin:2px 0 0;
-  }
+  .loc-top{display:flex;align-items:center;gap:8px;}
+  .icon-btn{padding:8px 10px;flex-shrink:0;}
+  .dup-tag{font-size:11.5px;color:var(--warning-text);margin:0;}
+  .kat-label{font-size:11.5px;color:var(--text-muted);margin:2px 0 0;}
   .search-wrap{position:relative;}
-  .suggest-box{
-    position:absolute;
-    top:100%;
-    left:0;
-    right:0;
-    background:#fff;
-    border:1px solid var(--border-strong);
-    border-radius:var(--radius);
-    margin-top:4px;
-    max-height:180px;
-    overflow:auto;
-    z-index:20;
-    display:none;
-    box-shadow:0 8px 20px rgba(0,0,0,0.08);
-  }
-  .suggest-item{
-    padding:9px 12px;
-    font-size:13px;
-    cursor:pointer;
-  }
+  .suggest-box{position:absolute;top:100%;left:0;right:0;background:#fff;border:1px solid var(--border-strong);border-radius:var(--radius);margin-top:4px;max-height:220px;overflow:auto;z-index:20;display:none;box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+  .suggest-item{padding:9px 12px;font-size:13px;cursor:pointer;}
   .suggest-item:hover{background:var(--surface-1);}
-  .chip-line{
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .chip-badge{
-    font-size:12px;
-    background:var(--accent-bg);
-    color:var(--accent-text);
-    padding:7px 10px;
-    border-radius:var(--radius);
-    flex-shrink:0;
-    white-space:nowrap;
-  }
-  .result-box{
-    background:var(--surface-1);
-    border-radius:var(--radius);
-    padding:14px;
-    margin-bottom:10px;
-  }
-  .result-box .label{
-    font-size:11px;
-    color:var(--text-muted);
-    margin:0 0 4px;
-  }
-  .result-box .value{
-    font-size:23px;
-    font-weight:600;
-    margin:0;
-  }
+  .chip-line{display:flex;align-items:center;gap:8px;}
+  .chip-badge{font-size:12px;background:var(--accent-bg);color:var(--accent-text);padding:7px 10px;border-radius:var(--radius);flex-shrink:0;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .result-box{background:var(--surface-1);border-radius:var(--radius);padding:14px;margin-bottom:10px;}
+  .result-box .label{font-size:11px;color:var(--text-muted);margin:0 0 4px;}
+  .result-box .value{font-size:23px;font-weight:600;margin:0;}
   .result-box .value.small{font-size:14px;}
-  .result-box .detail{
-    font-size:11.5px;
-    color:var(--text-muted);
-    margin:6px 0 0;
-  }
-  .info-head{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin-bottom:4px;
-  }
+  .result-box .detail{font-size:11.5px;color:var(--text-muted);margin:6px 0 0;}
+  .info-head{display:flex;align-items:center;gap:8px;margin-bottom:4px;}
   .info-head i{color:var(--text-secondary);font-size:16px;}
   .info-head p{font-size:13.5px;font-weight:600;margin:0;}
-  .info-list div{
-    font-size:12.5px;
-    color:var(--text-secondary);
-    border-top:1px solid var(--border);
-    padding-top:6px;
-    margin-top:6px;
-  }
-  .badge-note{
-    display:inline-block;
-    font-size:11px;
-    background:#fef3c7;
-    color:#92400e;
-    padding:3px 8px;
-    border-radius:6px;
-    margin-left:8px;
-  }
+  .info-list div{font-size:12.5px;color:var(--text-secondary);border-top:1px solid var(--border);padding-top:6px;margin-top:6px;}
+  .badge-note{display:inline-block;font-size:11px;background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:6px;margin-left:8px;}
+  .foreign-note{display:none;background:var(--accent-bg);border-radius:12px;padding:16px;font-size:12.5px;color:var(--accent-text);}
 </style>
 </head>
 <body>
@@ -275,7 +76,7 @@
 
   <div class="banner">
     <p class="tag">Dummy / prototipe internal</p>
-    <h1>Kalkulator PNBP - Izin Penerapan CPPOB<span class="badge-note">Data belum final</span></h1>
+    <h1>Kalkulator Biaya Layanan PNBP - Direktorat Pengawasan Produksi Pangan Olahan<span class="badge-note">Data belum final</span></h1>
     <p class="sub">Simulasi tampilan dan alur perhitungan PNBP mengacu PP 15/2026. Seluruh data lokasi, proses produksi, kategori pangan, dan tarif pada halaman ini masih data uji coba.</p>
   </div>
 
@@ -283,33 +84,21 @@
 
     <div>
       <div class="card">
-        <h2>Data izin</h2>
-        <p class="desc">Berlaku untuk seluruh permohonan</p>
-
-        <p class="group-label">Tipe permohonan</p>
-        <div class="opt-row" id="tipe-group">
-          <div class="opt" data-group="tipe" data-val="pendaftaran">IP CPPOB pendaftaran</div>
-          <div class="opt" data-group="tipe" data-val="ekspor">IP CPPOB ekspor</div>
-        </div>
-
-        <p class="group-label">Skala usaha</p>
-        <div class="opt-row" id="skala-group">
-          <div class="opt" data-group="skala" data-val="mikro">Mikro</div>
-          <div class="opt" data-group="skala" data-val="kecil">Kecil</div>
-          <div class="opt" data-group="skala" data-val="menengah">Menengah</div>
-          <div class="opt" data-group="skala" data-val="besar">Besar</div>
-        </div>
-
-        <p class="group-label">Jenis permohonan</p>
-        <div class="opt-row" id="jenis-group" style="margin-bottom:0;">
-          <div class="opt" data-group="jenis" data-val="baru">Baru</div>
-          <div class="opt" data-group="jenis" data-val="perpanjangan">Perpanjangan</div>
-          <div class="opt" data-group="jenis" data-val="teknis">Perubahan teknis</div>
-          <div class="opt" data-group="jenis" data-val="administrasi">Perubahan administrasi</div>
+        <p class="group-label">Jenis layanan</p>
+        <div class="opt-row" id="layanan-group" style="margin-bottom:0;">
+          <div class="opt" data-group="layanan" data-val="cppob">IP CPPOB</div>
+          <div class="opt" data-group="layanan" data-val="pmr">IP PMR</div>
+          <div class="opt" data-group="layanan" data-val="foreign">Foreign Inspection</div>
         </div>
       </div>
 
-      <div class="card" style="margin-bottom:0;">
+      <div class="card" id="izin-card" style="display:none;">
+        <h2>Data izin</h2>
+        <p class="desc">Berlaku untuk seluruh permohonan</p>
+        <div id="izin-subfields"></div>
+      </div>
+
+      <div class="card" id="lokasi-card" style="display:none;margin-bottom:16px;">
         <div class="row-header">
           <div>
             <h2>Lokasi dan proses produksi</h2>
@@ -319,6 +108,10 @@
         </div>
         <div class="rows-container" id="rows-container"></div>
       </div>
+
+      <div class="foreign-note" id="foreign-note">
+        <i class="ti ti-info-circle" style="margin-right:6px;"></i>Foreign Inspection tidak memerlukan isian lain - tarif flat langsung berlaku.
+      </div>
     </div>
 
     <div>
@@ -327,12 +120,12 @@
         <div class="result-box">
           <p class="label">Total tarif</p>
           <p class="value" id="total-value">Rp -</p>
-          <p class="detail" id="total-detail">Lengkapi data izin dan lokasi</p>
+          <p class="detail" id="total-detail">Pilih jenis layanan</p>
         </div>
-        <div class="result-box" style="margin-bottom:0;">
+        <div class="result-box" style="margin-bottom:0;" id="upt-box">
           <p class="label">UPT / unit pemeriksa</p>
           <p class="value small" id="upt-value">-</p>
-          <p class="detail" id="upt-detail">Pilih tipe permohonan</p>
+          <p class="detail" id="upt-detail">Pilih jenis layanan</p>
         </div>
       </div>
 
@@ -374,34 +167,161 @@
 
 <script>
 (function(){
-  var tarif = {
+  var cppobTarif = {
     besar: {baru:3000000, perpanjangan:2000000, teknis:1000000, administrasi:0},
     menengah: {baru:1000000, perpanjangan:750000, teknis:500000, administrasi:0},
     kecil: {baru:0, perpanjangan:0, teknis:0, administrasi:0},
     mikro: {baru:0, perpanjangan:0, teknis:0, administrasi:0}
   };
+  var pmrTarif = {
+    besar: {baru:5000000, teknis:2000000, perpanjangan:3000000},
+    menengah: {baru:3000000, teknis:1000000, perpanjangan:1500000},
+    kecil: {baru:0, teknis:0, perpanjangan:0},
+    mikro: {baru:0, teknis:0, perpanjangan:0}
+  };
+  var foreignFee = 50000000;
+
   var skalaLabel = {besar:"Besar", menengah:"Menengah", kecil:"Kecil", mikro:"Mikro"};
   var jenisLabel = {baru:"Baru", perpanjangan:"Perpanjangan", teknis:"Perubahan teknis", administrasi:"Perubahan administrasi"};
 
   var lokasiOpts = ["Bandung", "Surabaya", "Jakarta", "Bekasi"];
   var uptMap = {"Bandung":"BBPOM di Bandung", "Surabaya":"BBPOM di Surabaya", "Jakarta":"BBPOM di Jakarta", "Bekasi":"BBPOM di Bandung"};
-  var prosesOpts = ["Sterilisasi", "Pasteurisasi", "Pemanggangan", "Mixing"];
-  var katpangOpts = ["Susu", "Daging Olahan", "Biskuit"];
+
+  var prosesOpts = [
+    "Sterilisasi","Pasteurisasi","Pemanggangan","Pengeringan","Blansir","Blansir perendaman",
+    "Penggorengan","Evaporasi","Pelelehan","Penyangraian","Pengukusan / steaming",
+    "Pemotongan / perajangan / penghancuran / pemecahan / pelumatan / penggilingan / pemarutan / pengecilan ukuran",
+    "Penyaringan / filtrasi","Pencampuran / mixing / formulasi","Fermentasi menggunakan bakteri",
+    "Pendinginan","Pembekuan","Curing","Smoking / pengasapan","Sulfitasi / karbonatasi / kombinasi",
+    "Pemekatan","Ekstraksi (panas, solvent, mekanis)","Fraksinasi","Pemurnian / penyulingan / refinery",
+    "Hidrogenasi","Pemucatan, deodorisasi","Emulsifikasi","Dispersi","Rekonstruksi",
+    "Enzimatik pati / modifikasi","Koagulasi / churning","Pemeraman / aging / ripening","Hidrolisis",
+    "Gelatinisasi","Karbonasi","Isomerisasi","Klarifikasi","Marinasi",
+    "Pelapisan / coating / pencelupan / penyemprotan / penepungan / breading","Vakum","Pencetakan",
+    "Granulasi / pembubukan","Pembersihan / pencucian","Perontokan / pemipilan",
+    "Pengasinan / penggaraman","Pengasaman / acidifikasi","Iradiasi","Tanpa perlakuan"
+  ];
+
+  var katpangOpts = [
+    "01.1.1 Susu Cair Plain","01.1.2 Susu Cair Lain","01.1.3 Buttermilk Cair (plain)","01.1.4 Minuman Susu Cair Rasa/Berperisa",
+    "01.2.1 Susu Fermentasi (Plain)","01.2.1.1 Produk Susu Fermentasi (Plain) Tanpa Pemanasan","01.2.1.2 Produk Susu Fermentasi (Plain) Dengan Pemanasan",
+    "01.2.2 Susu yang Digumpalkan dengan Rennet (Plain)","01.3 Susu dan Krim Kental Manis","01.3.1 Susu Kental","01.3.2 Krimer Minuman",
+    "01.4.1 Krim Pasteurisasi (Plain) dan Sejenisnya","01.4.2 Krim yang Disterilkan atau UHT, Krim Whipping/Whipped, dan Krim Rendah Lemak (Plain)",
+    "01.4.3 Krim yang Digumpalkan (Plain)","01.4.4 Krim Analog","01.5.1 Susu Bubuk dan Krim Bubuk (Plain)","01.5.2 Susu dan Krim Bubuk Analog",
+    "01.6.1 Keju Tanpa Pemeraman (Keju Mentah)","01.6.2 Keju Peram","01.6.3 Keju Whey","01.6.4 Keju Olahan","01.6.5 Analog Keju (Keju Lemak Nabati)",
+    "01.6.6 Keju Protein Whey","01.7 Makanan Pencuci Mulut Berbahan Dasar Susu (mis. Puding, Yogurt Berperisa atau dengan Buah)",
+    "01.8.1 Cairan Whey dan Produknya, Kecuali Keju Whey","01.8.2 Bubuk Whey dan Produknya, Kecuali Keju Whey",
+    "02.1 Lemak dan Minyak (Edible) yang Tidak Mengandung Air","02.1.1 Lemak Susu Anhidrat, Minyak Mentega dan Ghee",
+    "02.1.2 Lemak dan Minyak Nabati","02.1.3 Lemak dan Minyak Hewani","02.2 Emulsi Lemak Tipe Air Dalam Minyak",
+    "02.3 Emulsi Lemak Tipe Minyak dalam Air, Termasuk Produk Campuran Emulsi Lemak","02.3 Emulsi Lemak Tipe Minyak dalam Air (Krim Bubuk)",
+    "02.4 Makanan Pencuci Mulut Berbasis Lemak Tidak Termasuk Kategori 01.7","03.0 Es Untuk Dimakan (Edible Ice), Termasuk Sherbet dan Sorbet",
+    "04.1.2 Buah Olahan","04.1.2 Buah Olahan (mis. Buah Bubuk, Geplak)",
+    "04.2.1 Sayur Segar (Termasuk Jamur, Akar, Umbi, Polong-polongan, dan Aloe Vera), Rumput Laut, Kacang serta Biji-bijian",
+    "04.2.2 Sayur Olahan (Termasuk Jamur, Akar, Umbi, Polong-polongan, dan Aloe Vera), Rumput Laut, Kacang Serta Biji-bijian",
+    "04.2.2 Sayur Olahan (mis. Sayur Kering, Rumput Laut Kering, Emping)",
+    "04.2.2 Sayur Olahan (mis. Sayur/Jamur/Buah dalam Media Minyak, Cuka, Larutan Garam, atau Kecap Kedelai yang Disterilisasi)",
+    "05.1 Produk Kakao dan Cokelat Termasuk Produk Pengganti Cokelat","05.2 Kembang Gula/Permen (Keras dan Lunak, Nougats, dan Lain-lain)",
+    "05.3 Kembang Gula Karet / Permen Karet","05.4 Dekorasi (mis. Untuk Bakery), Topping (Non-Buah) dan Saus Manis",
+    "06.1 Biji-bijian Utuh, Patahan, atau Serpihan, Termasuk Beras","06.2.1 Tepung","06.2.2 Pati","06.3 Serealia Untuk Sarapan, Termasuk Rolled Oats",
+    "06.4.1 Pasta dan Mi Basah Serta Produk Sejenisnya (mis. Rice Paper, Bihun, Pasta dan Mi Kedelai)","06.4.2 Pasta dan Mi Kering Serta Produk Sejenisnya",
+    "06.4.3 Pasta dan Mi Pra-masak Serta Produk Sejenis","06.5 Makanan Pencuci Mulut Berbasis Serealia dan Pati (mis. Puding Nasi, Puding Tapioka)",
+    "06.6 Tepung Untuk Adonan (mis. Untuk Melapisi Permukaan Ikan atau Daging Ayam)","06.7 Produk Olahan Beras",
+    "06.7 Produk Olahan Beras (Bubur Siap Konsumsi/Siap Santap/Siap Saji)","06.8 Produk-produk Kedelai","07.1 Roti dan Produk Bakeri Tawar",
+    "07.1.6 Premiks Bentuk Bubuk (termasuk kategori 1, 5, 6, 7, 10, dan 14)","07.2 Produk Bakeri Istimewa (Manis, Asin, Gurih)","07.3 Adonan/Produk Bakeri Beku",
+    "08.1.1 Daging, Daging Unggas dan Daging Hewan Buruan Segar, Utuh atau Potongan","08.1.2 Daging, Daging Unggas dan Daging Hewan Buruan Segar yang Dihaluskan",
+    "08.2.1 Produk Olahan Daging, Unggas dan Hewan Buruan, Utuh atau Potongan Tanpa Perlakuan Panas",
+    "08.2.2 Produk Daging, Unggas dan Hewan Buruan, Utuh atau Potongan yang Diolah Dengan Perlakuan Panas",
+    "08.2.3 Produk Olahan Daging, Unggas dan Hewan Buruan, Utuh atau Potongan yang Dibekukan",
+    "08.3.1 Produk Daging, Unggas dan Hewan Buruan yang Dihaluskan, Tanpa Perlakuan Panas",
+    "08.3.2 Daging, Unggas dan Hewan Buruan yang Dihaluskan, Diolah dengan Perlakuan Panas",
+    "08.3.3 Daging, Unggas dan Hewan Buruan yang Dihaluskan, Diolah dan Dibekukan","08.4 Selongsong Sosis",
+    "09.1.1 Ikan Segar","09.1.2 Moluska, Krustase, dan Ekinodermata Segar",
+    "09.2.1 Ikan, Filet Ikan, dan Produk Perikanan Termasuk Moluska, Krustase, dan Ekinodermata yang Dibekukan",
+    "09.2.2 Ikan, Filet Ikan dan Hasil Perikanan Berlapis Tepung yang Dibekukan",
+    "09.2.3 Produk Hancuran Ikan (Minced) dengan Krim, Termasuk Moluska, Krustase, dan Ekinodermata yang Dibekukan",
+    "09.2.4 Ikan dan Produk Perikanan yang Dimasak dan/atau Digoreng",
+    "09.2.5 Ikan dan Produk Perikanan yang Diasap, Dikeringkan, Difermentasi, dan/atau Digarami",
+    "09.3.1 Ikan dan Produk Perikanan yang Direndam Dalam Bumbu (Marinasi) dan/atau Di Dalam Jelly",
+    "09.3.2 Ikan dan Produk Perikanan yang Diolah Menjadi Pikel dan/atau Direndam Dalam Larutan Garam",
+    "09.3.3 Pengganti Telur Salmon, Caviar, dan Produk Telur Ikan Lainnya","09.3.4 Ikan dan Produk Perikanan Semi Awet (Contohnya Pasta Ikan)",
+    "09.4 Ikan dan Produk Perikanan yang Diawetkan, Termasuk Dikalengkan atau Difermentasi",
+    "10.1 Telur Segar","10.2.1 Produk Telur Cair","10.2.2 Produk Telur Beku","10.2.3 Produk Telur Bubuk",
+    "10.3 Telur yang Diawetkan, Termasuk Produk Tradisional (Dibasakan, Diasinkan, Dikalengkan)",
+    "10.4 Makanan Pencuci Mulut Berbahan Dasar Telur (mis. Custard)","11.1 Gula Mentah dan Gula Dimurnikan (Rafinasi)",
+    "11.1 Gula Mentah dan Gula Dimurnikan (Gula Putih/Merah Lembab, Sirup Glukosa, dll)","11.2 Gula Merah",
+    "11.3 Larutan Gula dan Sirup, Termasuk Treacle dan Molases","11.4 Gula dan Sirup Lainnya (mis. Xilosa, Sirup Maple, Gula Hias)","11.5 Madu",
+    "11.6 Pemanis, Termasuk Pemanis Buatan (Table Top Sweeteners)","12.1 Garam dan Pengganti Garam","12.10 Protein Produk",
+    "12.2 Herba, Rempah, Bumbu dan Kondimen","12.3 Cuka Makan","12.4 Mustard","12.5.1 Sup Siap Saji dan Kaldu, Termasuk Kalengan, Botol dan Beku",
+    "12.5.2 Sup dan Kaldu Bubuk","12.6 Saus dan Produk Sejenis","12.7 Produk Oles Untuk Salad dan Sandwich","12.8 Ragi dan Produk Sejenisnya",
+    "12.9 Bumbu dan Kondimen dari Kedelai","13.1 Formula Bayi, Formula Lanjutan dan Formula Pertumbuhan","13.1.2 Formula Lanjutan dan Formula Pertumbuhan",
+    "13.1.3 Pangan Olahan Untuk Keperluan Medis Khusus Untuk Bayi dan Anak","13.2 Makanan Untuk Bayi dan Anak Dalam Masa Pertumbuhan",
+    "13.2 Makanan Untuk Bayi dan Anak (Repacking Sekunder MPASI)","13.3 Pangan Olahan Untuk Keperluan Medis Khusus Untuk Dewasa",
+    "13.4 Pangan Olahan Diet untuk Kontrol Berat Badan","13.5 Pangan Olahan Diet Khusus (Selain Kategori 13.1-13.4)",
+    "14.1.1.1 Air Mineral Alami dan Sumbernya","14.1.1.2 Air Minum Olahan","14.1.2 Sari Buah dan Sari Sayuran","14.1.3 Nektar Buah dan Nektar Sayur",
+    "14.1.4 Minuman Berbasis Air Berperisa dan Particulated Drinks","14.1.5 Kopi, Kopi Substitusi, Teh, Seduhan Herbal, dan Minuman Biji-bijian/Sereal Panas, Kecuali Cokelat",
+    "14.2.1 Bir","14.2.2 Cider dan Perry","14.2.3 Anggur / Grape Wine","14.2.4 Anggur dari Selain Buah Anggur","14.2.5 Mead, Anggur Madu",
+    "14.2.6 Minuman Spirit yang Mengandung Etanol Lebih dari 15%","14.2.7 Minuman Beralkohol yang Diberi Aroma",
+    "15.1 Makanan Ringan Berbahan Dasar Kentang, Umbi, Serealia, Tepung atau Pati","15.2 Olahan Kacang, Termasuk Kacang Terlapisi dan Campuran Kacang",
+    "15.3 Makanan Ringan Berbasis Ikan","15.4 Makanan Ringan Ekstrudat","16.0 Pangan Siap Saji (Terkemas)",
+    "17.1 Bahan Tambahan Pangan Padat","17.2 Bahan Tambahan Pangan Cair","17.3 Bahan Tambahan Pangan Lainnya",
+    "17.4 Pangan Olahan Lainnya dengan Proses Hot Filling","17.5 Pangan Olahan Lainnya dengan Proses Pasteurisasi",
+    "17.6 Premiks Bentuk Cair (termasuk kategori 1, 5, 6, 7, 10, dan 14)"
+  ];
 
   var rows = [];
   var rowIdCounter = 0;
+  var currentLayanan = null;
 
-  document.querySelectorAll('.opt').forEach(function(el){
+  function bindOpt(el, cb){
     el.addEventListener('click', function(){
       var group = el.getAttribute('data-group');
       document.querySelectorAll('.opt[data-group="'+group+'"]').forEach(function(o){ o.classList.remove('active'); });
       el.classList.add('active');
-      el.dataset.selected = 'true';
-      recalc();
+      if(cb) cb(el.getAttribute('data-val'));
     });
-  });
+  }
+  document.querySelectorAll('#layanan-group .opt').forEach(function(el){ bindOpt(el, onLayananChange); });
 
-  function getSelected(group){
+  function onLayananChange(val){
+    currentLayanan = val;
+    var izinCard = document.getElementById('izin-card');
+    var lokasiCard = document.getElementById('lokasi-card');
+    var foreignNote = document.getElementById('foreign-note');
+    var subfields = document.getElementById('izin-subfields');
+
+    if(val === 'foreign'){
+      izinCard.style.display = 'none';
+      lokasiCard.style.display = 'none';
+      foreignNote.style.display = 'block';
+    } else {
+      izinCard.style.display = 'block';
+      lokasiCard.style.display = 'block';
+      foreignNote.style.display = 'none';
+
+      var html = '';
+      if(val === 'cppob'){
+        html += '<p class="group-label">Tipe permohonan</p><div class="opt-row">';
+        html += '<div class="opt" data-group="tipe" data-val="pendaftaran">IP CPPOB pendaftaran</div>';
+        html += '<div class="opt" data-group="tipe" data-val="ekspor">IP CPPOB ekspor</div></div>';
+      }
+      html += '<p class="group-label">Skala usaha</p><div class="opt-row">';
+      ['mikro','kecil','menengah','besar'].forEach(function(s){
+        html += '<div class="opt" data-group="skala" data-val="'+s+'">'+skalaLabel[s]+'</div>';
+      });
+      html += '</div>';
+      html += '<p class="group-label">Jenis permohonan</p><div class="opt-row" style="margin-bottom:0;">';
+      var jenisList = val === 'cppob' ? ['baru','perpanjangan','teknis','administrasi'] : ['baru','teknis','perpanjangan'];
+      jenisList.forEach(function(j){
+        html += '<div class="opt" data-group="jenis" data-val="'+j+'">'+jenisLabel[j]+'</div>';
+      });
+      html += '</div>';
+      subfields.innerHTML = html;
+      subfields.querySelectorAll('.opt').forEach(function(el){ bindOpt(el, recalc); });
+    }
+    recalc();
+  }
+
+  function getSelectedFixed(group){
     var el = document.querySelector('.opt[data-group="'+group+'"].active');
     return el ? el.getAttribute('data-val') : null;
   }
@@ -411,11 +331,7 @@
     rows.push({id: rowIdCounter, lokasi: '', proses: '', kategori: []});
     render();
   }
-
-  function removeRow(id){
-    rows = rows.filter(function(r){ return r.id !== id; });
-    render();
-  }
+  function removeRow(id){ rows = rows.filter(function(r){ return r.id !== id; }); render(); }
 
   function render(){
     var container = document.getElementById('rows-container');
@@ -469,7 +385,7 @@
       searchWrap.className = 'search-wrap';
       var searchInput = document.createElement('input');
       searchInput.type = 'text';
-      searchInput.placeholder = 'Cari kategori pangan, mis. susu, biskuit...';
+      searchInput.placeholder = 'Cari kategori pangan, mis. susu, daging, sup...';
       var suggestBox = document.createElement('div');
       suggestBox.className = 'suggest-box';
 
@@ -478,11 +394,8 @@
         var already = row.kategori.map(function(k){ return k.name; });
         var matches = katpangOpts.filter(function(o){ return already.indexOf(o) === -1 && o.toLowerCase().indexOf(q) !== -1; });
         suggestBox.innerHTML = '';
-        if(q.length === 0 || matches.length === 0){
-          suggestBox.style.display = 'none';
-          return;
-        }
-        matches.slice(0, 8).forEach(function(m){
+        if(q.length === 0 || matches.length === 0){ suggestBox.style.display = 'none'; return; }
+        matches.slice(0, 10).forEach(function(m){
           var item = document.createElement('div');
           item.className = 'suggest-item';
           item.textContent = m;
@@ -516,10 +429,11 @@
           var badge = document.createElement('span');
           badge.className = 'chip-badge';
           badge.textContent = k.name;
+          badge.title = k.name;
 
           var note = document.createElement('input');
           note.type = 'text';
-          note.placeholder = 'Catatan untuk ' + k.name + ' (opsional)';
+          note.placeholder = 'Catatan (opsional)';
           note.style.flex = '1';
           note.value = k.catatan;
           note.addEventListener('input', function(){ k.catatan = note.value; });
@@ -527,7 +441,7 @@
           var rm = document.createElement('button');
           rm.className = 'icon-btn';
           rm.innerHTML = '<i class="ti ti-x"></i>';
-          rm.title = 'Hapus ' + k.name;
+          rm.title = 'Hapus';
           rm.addEventListener('click', function(){ row.kategori.splice(kIdx, 1); render(); });
 
           line.appendChild(badge);
@@ -544,13 +458,25 @@
   }
 
   function recalc(){
-    var skala = getSelected('skala');
-    var jenis = getSelected('jenis');
-    var tipe = getSelected('tipe');
     var totalVal = document.getElementById('total-value');
     var totalDet = document.getElementById('total-detail');
     var uptVal = document.getElementById('upt-value');
     var uptDet = document.getElementById('upt-detail');
+    var uptBox = document.getElementById('upt-box');
+
+    if(currentLayanan === 'foreign'){
+      totalVal.textContent = 'Rp ' + foreignFee.toLocaleString('id-ID');
+      totalDet.textContent = 'Tarif flat Foreign Inspection';
+      uptBox.style.display = 'block';
+      uptVal.textContent = 'Direktorat Pengawasan Produksi Pangan Olahan';
+      uptDet.textContent = 'Tetap - Foreign Inspection ditangani pusat';
+      return;
+    }
+
+    uptBox.style.display = 'block';
+    var skala = getSelectedFixed('skala');
+    var jenis = getSelectedFixed('jenis');
+    var tipe = getSelectedFixed('tipe');
 
     var uniqueCombos = [];
     rows.forEach(function(r){
@@ -560,6 +486,14 @@
       }
     });
 
+    if(!currentLayanan){
+      totalDet.textContent = 'Pilih jenis layanan';
+      totalVal.textContent = 'Rp -';
+      uptDet.textContent = 'Pilih jenis layanan';
+      uptVal.textContent = '-';
+      return;
+    }
+
     if(!skala || !jenis){
       totalDet.textContent = 'Lengkapi skala usaha dan jenis permohonan';
       totalVal.textContent = 'Rp -';
@@ -567,24 +501,23 @@
       totalDet.textContent = 'Lengkapi minimal satu baris lokasi dan proses produksi';
       totalVal.textContent = 'Rp -';
     } else {
-      var unit = tarif[skala][jenis];
+      var table = currentLayanan === 'cppob' ? cppobTarif : pmrTarif;
+      var unit = table[skala][jenis];
       var total = unit * uniqueCombos.length;
       totalVal.textContent = 'Rp ' + total.toLocaleString('id-ID');
       totalDet.textContent = uniqueCombos.length + ' kombinasi unik x Rp ' + unit.toLocaleString('id-ID') + ' (' + skalaLabel[skala] + ', ' + jenisLabel[jenis] + ')';
     }
 
-    if(tipe){
-      if(tipe === 'ekspor'){
-        uptVal.textContent = 'Direktorat Pengawasan Produksi Pangan Olahan';
-        uptDet.textContent = 'Tetap - tipe permohonan ekspor';
-      } else {
-        var uptSet = [];
-        rows.forEach(function(r){
-          if(r.lokasi && uptMap[r.lokasi] && uptSet.indexOf(uptMap[r.lokasi]) === -1) uptSet.push(uptMap[r.lokasi]);
-        });
-        uptVal.textContent = uptSet.length ? uptSet.join(', ') : 'Menunggu lokasi dipilih';
-        uptDet.textContent = 'Menyesuaikan tiap lokasi pabrik';
-      }
+    if(currentLayanan === 'cppob' && tipe === 'ekspor'){
+      uptVal.textContent = 'Direktorat Pengawasan Produksi Pangan Olahan';
+      uptDet.textContent = 'Tetap - tipe permohonan ekspor';
+    } else {
+      var uptSet = [];
+      rows.forEach(function(r){
+        if(r.lokasi && uptMap[r.lokasi] && uptSet.indexOf(uptMap[r.lokasi]) === -1) uptSet.push(uptMap[r.lokasi]);
+      });
+      uptVal.textContent = uptSet.length ? uptSet.join(', ') : 'Menunggu lokasi dipilih';
+      uptDet.textContent = 'Menyesuaikan tiap lokasi pabrik';
     }
   }
 
