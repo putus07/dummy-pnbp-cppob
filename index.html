@@ -69,6 +69,12 @@
   .info-list div{font-size:12.5px;color:var(--text-secondary);border-top:1px solid var(--border);padding-top:6px;margin-top:6px;}
   .badge-note{display:inline-block;font-size:11px;background:#fef3c7;color:#92400e;padding:3px 8px;border-radius:6px;margin-left:8px;}
   .foreign-note{display:none;background:var(--accent-bg);border-radius:12px;padding:16px;font-size:12.5px;color:var(--accent-text);}
+  .var-item{display:flex;align-items:center;gap:10px;padding:9px 0;border-top:1px solid var(--border);}
+  .var-item:first-child{border-top:none;padding-top:2px;}
+  .var-icon{width:30px;height:30px;border-radius:8px;background:var(--accent-bg);color:var(--accent-text);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+  .var-text .t{font-size:13px;font-weight:500;color:var(--text-primary);margin:0;}
+  .var-text .s{font-size:11.5px;color:var(--text-muted);margin:2px 0 0;}
+  .field-label{font-size:12px;color:var(--text-secondary);margin:0 0 6px;font-weight:500;}
 </style>
 </head>
 <body>
@@ -141,11 +147,28 @@
 
       <div class="card">
         <div class="info-head"><i class="ti ti-adjustments"></i><p>Variabel yang memengaruhi biaya</p></div>
-        <p class="desc" style="margin-bottom:0;">Setiap variabel berdampak pada total estimasi</p>
-        <div class="info-list">
-          <div>1&nbsp;&nbsp;Lorem ipsum dolor sit amet consectetur</div>
-          <div>2&nbsp;&nbsp;Lorem ipsum dolor sit amet</div>
-          <div>3&nbsp;&nbsp;Lorem ipsum dolor sit amet consectetur elit</div>
+        <p class="desc" style="margin-bottom:2px;">Setiap variabel berdampak pada total estimasi</p>
+        <div>
+          <div class="var-item">
+            <div class="var-icon"><i class="ti ti-map-pin"></i></div>
+            <div class="var-text"><p class="t">Lokasi</p><p class="s">Titik lokasi fasilitas produksi</p></div>
+          </div>
+          <div class="var-item">
+            <div class="var-icon"><i class="ti ti-map-2"></i></div>
+            <div class="var-text"><p class="t">Provinsi / kota</p><p class="s">Menentukan UPT pemeriksa</p></div>
+          </div>
+          <div class="var-item">
+            <div class="var-icon"><i class="ti ti-clipboard-text"></i></div>
+            <div class="var-text"><p class="t">Jenis layanan</p><p class="s">IP CPPOB, IP PMR, atau Foreign Inspection</p></div>
+          </div>
+          <div class="var-item">
+            <div class="var-icon"><i class="ti ti-settings"></i></div>
+            <div class="var-text"><p class="t">Proses produksi utama</p><p class="s">Menentukan jumlah kombinasi biaya</p></div>
+          </div>
+          <div class="var-item">
+            <div class="var-icon"><i class="ti ti-building-factory-2"></i></div>
+            <div class="var-text"><p class="t">Skala usaha</p><p class="s">Mikro, kecil, menengah, atau besar</p></div>
+          </div>
         </div>
       </div>
 
@@ -184,8 +207,531 @@
   var skalaLabel = {besar:"Besar", menengah:"Menengah", kecil:"Kecil", mikro:"Mikro"};
   var jenisLabel = {baru:"Baru", perpanjangan:"Perpanjangan", teknis:"Perubahan teknis", administrasi:"Perubahan administrasi"};
 
-  var lokasiOpts = ["Bandung", "Surabaya", "Jakarta", "Bekasi"];
-  var uptMap = {"Bandung":"BBPOM di Bandung", "Surabaya":"BBPOM di Surabaya", "Jakarta":"BBPOM di Jakarta", "Bekasi":"BBPOM di Bandung"};
+  var lokasiOpts = [
+    "KAB. ACEH SELATAN",
+    "KAB. ACEH TENGGARA",
+    "KAB. ACEH TIMUR",
+    "KAB. ACEH TENGAH",
+    "KAB. ACEH BARAT",
+    "KAB. ACEH BESAR",
+    "KAB. PIDIE",
+    "KAB. ACEH UTARA",
+    "KAB. SIMEULUE",
+    "KAB. ACEH SINGKIL",
+    "KAB. BIREUEN",
+    "KAB. ACEH BARAT DAYA",
+    "KAB. GAYO LUES",
+    "KAB. ACEH JAYA",
+    "KAB. NAGAN RAYA",
+    "KAB. ACEH TAMIANG",
+    "KAB. BENER MERIAH",
+    "KAB. PIDIE JAYA",
+    "KOTA BANDA ACEH",
+    "KOTA SABANG",
+    "KOTA LHOKSEUMAWE",
+    "KOTA LANGSA",
+    "KOTA SUBULUSSALAM",
+    "KAB. TAPANULI TENGAH",
+    "KAB. TAPANULI UTARA",
+    "KAB. TAPANULI SELATAN",
+    "KAB. NIAS",
+    "KAB. LANGKAT",
+    "KAB. KARO",
+    "KAB. DELI SERDANG",
+    "KAB. SIMALUNGUN",
+    "KAB. ASAHAN",
+    "KAB. LABUHANBATU",
+    "KAB. DAIRI",
+    "KAB. TOBA",
+    "KAB. MANDAILING NATAL",
+    "KAB. NIAS SELATAN",
+    "KAB. PAKPAK BHARAT",
+    "KAB. HUMBANG HASUNDUTAN",
+    "KAB. SAMOSIR",
+    "KAB. SERDANG BEDAGAI",
+    "KAB. BATU BARA",
+    "KAB. PADANG LAWAS UTARA",
+    "KAB. PADANG LAWAS",
+    "KAB. LABUHANBATU SELATAN",
+    "KAB. LABUHANBATU UTARA",
+    "KAB. NIAS UTARA",
+    "KAB. NIAS BARAT",
+    "KOTA MEDAN",
+    "KOTA PEMATANGSIANTAR",
+    "KOTA SIBOLGA",
+    "KOTA TANJUNG BALAI",
+    "KOTA BINJAI",
+    "KOTA TEBING TINGGI",
+    "KOTA PADANG SIDEMPUAN",
+    "KOTA GUNUNGSITOLI",
+    "KAB. PESISIR SELATAN",
+    "KAB. SOLOK",
+    "KAB. SIJUNJUNG",
+    "KAB. TANAH DATAR",
+    "KAB. PADANG PARIAMAN",
+    "KAB. AGAM",
+    "KAB. LIMA PULUH KOTA",
+    "KAB. PASAMAN",
+    "KAB. KEPULAUAN MENTAWAI",
+    "KAB. DHARMASRAYA",
+    "KAB. SOLOK SELATAN",
+    "KAB. PASAMAN BARAT",
+    "KOTA PADANG",
+    "KOTA SOLOK",
+    "KOTA SAWAHLUNTO",
+    "KOTA PADANG PANJANG",
+    "KOTA BUKITTINGGI",
+    "KOTA PAYAKUMBUH",
+    "KOTA PARIAMAN",
+    "KAB. KAMPAR",
+    "KAB. INDRAGIRI HULU",
+    "KAB. BENGKALIS",
+    "KAB. INDRAGIRI HILIR",
+    "KAB. PELALAWAN",
+    "KAB. ROKAN HULU",
+    "KAB. ROKAN HILIR",
+    "KAB. SIAK",
+    "KAB. KUANTAN SINGINGI",
+    "KAB. KEPULAUAN MERANTI",
+    "KOTA PEKANBARU",
+    "KOTA DUMAI",
+    "KAB. KERINCI",
+    "KAB. MERANGIN",
+    "KAB. SAROLANGUN",
+    "KAB. BATANGHARI",
+    "KAB. MUARO JAMBI",
+    "KAB. TANJUNG JABUNG BARAT",
+    "KAB. TANJUNG JABUNG TIMUR",
+    "KAB. BUNGO",
+    "KAB. TEBO",
+    "KOTA JAMBI",
+    "KOTA SUNGAI PENUH",
+    "KAB. OGAN KOMERING ULU",
+    "KAB. OGAN KOMERING ILIR",
+    "KAB. MUARA ENIM",
+    "KAB. LAHAT",
+    "KAB. MUSI RAWAS",
+    "KAB. MUSI BANYUASIN",
+    "KAB. BANYUASIN",
+    "KAB. OGAN KOMERING ULU TIMUR",
+    "KAB. OGAN KOMERING ULU SELATAN",
+    "KAB. OGAN ILIR",
+    "KAB. EMPAT LAWANG",
+    "KAB. PENUKAL ABAB LEMATANG ILIR",
+    "KAB. MUSI RAWAS UTARA",
+    "KOTA PALEMBANG",
+    "KOTA PAGAR ALAM",
+    "KOTA LUBUK LINGGAU",
+    "KOTA PRABUMULIH",
+    "KAB. BENGKULU SELATAN",
+    "KAB. REJANG LEBONG",
+    "KAB. BENGKULU UTARA",
+    "KAB. KAUR",
+    "KAB. SELUMA",
+    "KAB. MUKO MUKO",
+    "KAB. LEBONG",
+    "KAB. KEPAHIANG",
+    "KAB. BENGKULU TENGAH",
+    "KOTA BENGKULU",
+    "KAB. LAMPUNG SELATAN",
+    "KAB. LAMPUNG TENGAH",
+    "KAB. LAMPUNG UTARA",
+    "KAB. LAMPUNG BARAT",
+    "KAB. TULANG BAWANG",
+    "KAB. TANGGAMUS",
+    "KAB. LAMPUNG TIMUR",
+    "KAB. WAY KANAN",
+    "KAB. PESAWARAN",
+    "KAB. PRINGSEWU",
+    "KAB. MESUJI",
+    "KAB. TULANG BAWANG BARAT",
+    "KAB. PESISIR BARAT",
+    "KOTA BANDAR LAMPUNG",
+    "KOTA METRO",
+    "KAB. BANGKA",
+    "KAB. BELITUNG",
+    "KAB. BANGKA SELATAN",
+    "KAB. BANGKA TENGAH",
+    "KAB. BANGKA BARAT",
+    "KAB. BELITUNG TIMUR",
+    "KOTA PANGKAL PINANG",
+    "KAB. BINTAN",
+    "KAB. KARIMUN",
+    "KAB. NATUNA",
+    "KAB. LINGGA",
+    "KAB. KEPULAUAN ANAMBAS",
+    "KOTA BATAM",
+    "KOTA TANJUNG PINANG",
+    "KAB. ADM. KEP. SERIBU",
+    "KOTA ADM. JAKARTA PUSAT",
+    "KOTA ADM. JAKARTA UTARA",
+    "KOTA ADM. JAKARTA BARAT",
+    "KOTA ADM. JAKARTA SELATAN",
+    "KOTA ADM. JAKARTA TIMUR",
+    "KAB. BOGOR",
+    "KAB. SUKABUMI",
+    "KAB. CIANJUR",
+    "KAB. BANDUNG",
+    "KAB. GARUT",
+    "KAB. TASIKMALAYA",
+    "KAB. CIAMIS",
+    "KAB. KUNINGAN",
+    "KAB. CIREBON",
+    "KAB. MAJALENGKA",
+    "KAB. SUMEDANG",
+    "KAB. INDRAMAYU",
+    "KAB. SUBANG",
+    "KAB. PURWAKARTA",
+    "KAB. KARAWANG",
+    "KAB. BEKASI",
+    "KAB. BANDUNG BARAT",
+    "KAB. PANGANDARAN",
+    "KOTA BOGOR",
+    "KOTA SUKABUMI",
+    "KOTA BANDUNG",
+    "KOTA CIREBON",
+    "KOTA BEKASI",
+    "KOTA DEPOK",
+    "KOTA CIMAHI",
+    "KOTA TASIKMALAYA",
+    "KOTA BANJAR",
+    "KAB. CILACAP",
+    "KAB. BANYUMAS",
+    "KAB. PURBALINGGA",
+    "KAB. BANJARNEGARA",
+    "KAB. KEBUMEN",
+    "KAB. PURWOREJO",
+    "KAB. WONOSOBO",
+    "KAB. MAGELANG",
+    "KAB. BOYOLALI",
+    "KAB. KLATEN",
+    "KAB. SUKOHARJO",
+    "KAB. WONOGIRI",
+    "KAB. KARANGANYAR",
+    "KAB. SRAGEN",
+    "KAB. GROBOGAN",
+    "KAB. BLORA",
+    "KAB. REMBANG",
+    "KAB. PATI",
+    "KAB. KUDUS",
+    "KAB. JEPARA",
+    "KAB. DEMAK",
+    "KAB. SEMARANG",
+    "KAB. TEMANGGUNG",
+    "KAB. KENDAL",
+    "KAB. BATANG",
+    "KAB. PEKALONGAN",
+    "KAB. PEMALANG",
+    "KAB. TEGAL",
+    "KAB. BREBES",
+    "KOTA MAGELANG",
+    "KOTA SURAKARTA",
+    "KOTA SALATIGA",
+    "KOTA SEMARANG",
+    "KOTA PEKALONGAN",
+    "KOTA TEGAL",
+    "KAB. KULON PROGO",
+    "KAB. BANTUL",
+    "KAB. GUNUNGKIDUL",
+    "KAB. SLEMAN",
+    "KOTA YOGYAKARTA",
+    "KAB. PACITAN",
+    "KAB. PONOROGO",
+    "KAB. TRENGGALEK",
+    "KAB. TULUNGAGUNG",
+    "KAB. BLITAR",
+    "KAB. KEDIRI",
+    "KAB. MALANG",
+    "KAB. LUMAJANG",
+    "KAB. JEMBER",
+    "KAB. BANYUWANGI",
+    "KAB. BONDOWOSO",
+    "KAB. SITUBONDO",
+    "KAB. PROBOLINGGO",
+    "KAB. PASURUAN",
+    "KAB. SIDOARJO",
+    "KAB. MOJOKERTO",
+    "KAB. JOMBANG",
+    "KAB. NGANJUK",
+    "KAB. MADIUN",
+    "KAB. MAGETAN",
+    "KAB. NGAWI",
+    "KAB. BOJONEGORO",
+    "KAB. TUBAN",
+    "KAB. LAMONGAN",
+    "KAB. GRESIK",
+    "KAB. BANGKALAN",
+    "KAB. SAMPANG",
+    "KAB. PAMEKASAN",
+    "KAB. SUMENEP",
+    "KOTA KEDIRI",
+    "KOTA BLITAR",
+    "KOTA MALANG",
+    "KOTA PROBOLINGGO",
+    "KOTA PASURUAN",
+    "KOTA MOJOKERTO",
+    "KOTA MADIUN",
+    "KOTA SURABAYA",
+    "KOTA BATU",
+    "KAB. PANDEGLANG",
+    "KAB. LEBAK",
+    "KAB. TANGERANG",
+    "KAB. SERANG",
+    "KOTA TANGERANG",
+    "KOTA CILEGON",
+    "KOTA SERANG",
+    "KOTA TANGERANG SELATAN",
+    "KAB. JEMBRANA",
+    "KAB. TABANAN",
+    "KAB. BADUNG",
+    "KAB. GIANYAR",
+    "KAB. KLUNGKUNG",
+    "KAB. BANGLI",
+    "KAB. KARANGASEM",
+    "KAB. BULELENG",
+    "KOTA DENPASAR",
+    "KAB. LOMBOK BARAT",
+    "KAB. LOMBOK TENGAH",
+    "KAB. LOMBOK TIMUR",
+    "KAB. SUMBAWA",
+    "KAB. DOMPU",
+    "KAB. BIMA",
+    "KAB. SUMBAWA BARAT",
+    "KAB. LOMBOK UTARA",
+    "KOTA MATARAM",
+    "KOTA BIMA",
+    "KAB. KUPANG",
+    "KAB TIMOR TENGAH SELATAN",
+    "KAB. TIMOR TENGAH UTARA",
+    "KAB. BELU",
+    "KAB. ALOR",
+    "KAB. FLORES TIMUR",
+    "KAB. SIKKA",
+    "KAB. ENDE",
+    "KAB. NGADA",
+    "KAB. MANGGARAI",
+    "KAB. SUMBA TIMUR",
+    "KAB. SUMBA BARAT",
+    "KAB. LEMBATA",
+    "KAB. ROTE NDAO",
+    "KAB. MANGGARAI BARAT",
+    "KAB. NAGEKEO",
+    "KAB. SUMBA TENGAH",
+    "KAB. SUMBA BARAT DAYA",
+    "KAB. MANGGARAI TIMUR",
+    "KAB. SABU RAIJUA",
+    "KAB. MALAKA",
+    "KOTA KUPANG",
+    "KAB. SAMBAS",
+    "KAB. MEMPAWAH",
+    "KAB. SANGGAU",
+    "KAB. KETAPANG",
+    "KAB. SINTANG",
+    "KAB. KAPUAS HULU",
+    "KAB. BENGKAYANG",
+    "KAB. LANDAK",
+    "KAB. SEKADAU",
+    "KAB. MELAWI",
+    "KAB. KAYONG UTARA",
+    "KAB. KUBU RAYA",
+    "KOTA PONTIANAK",
+    "KOTA SINGKAWANG",
+    "KAB. KOTAWARINGIN BARAT",
+    "KAB. KOTAWARINGIN TIMUR",
+    "KAB. KAPUAS",
+    "KAB. BARITO SELATAN",
+    "KAB. BARITO UTARA",
+    "KAB. KATINGAN",
+    "KAB. SERUYAN",
+    "KAB. SUKAMARA",
+    "KAB. LAMANDAU",
+    "KAB. GUNUNG MAS",
+    "KAB. PULANG PISAU",
+    "KAB. MURUNG RAYA",
+    "KAB. BARITO TIMUR",
+    "KOTA PALANGKARAYA",
+    "KAB. TANAH LAUT",
+    "KAB. KOTABARU",
+    "KAB. BANJAR",
+    "KAB. BARITO KUALA",
+    "KAB. TAPIN",
+    "KAB. HULU SUNGAI SELATAN",
+    "KAB. HULU SUNGAI TENGAH",
+    "KAB. HULU SUNGAI UTARA",
+    "KAB. TABALONG",
+    "KAB. TANAH BUMBU",
+    "KAB. BALANGAN",
+    "KOTA BANJARMASIN",
+    "KOTA BANJARBARU",
+    "KAB. PASER",
+    "KAB. KUTAI KARTANEGARA",
+    "KAB. BERAU",
+    "KAB. KUTAI BARAT",
+    "KAB. KUTAI TIMUR",
+    "KAB. PENAJAM PASER UTARA",
+    "KAB. MAHAKAM ULU",
+    "KOTA BALIKPAPAN",
+    "KOTA SAMARINDA",
+    "KOTA BONTANG",
+    "KAB. BULUNGAN",
+    "KAB. MALINAU",
+    "KAB. NUNUKAN",
+    "KAB. TANA TIDUNG",
+    "KOTA TARAKAN",
+    "KAB. BOLAANG MONGONDOW",
+    "KAB. MINAHASA",
+    "KAB. KEPULAUAN SANGIHE",
+    "KAB. KEPULAUAN TALAUD",
+    "KAB. MINAHASA SELATAN",
+    "KAB. MINAHASA UTARA",
+    "KAB. MINAHASA TENGGARA",
+    "KAB. BOLAANG MONGONDOW UTARA",
+    "KAB. KEP. SIAU TAGULANDANG BIARO",
+    "KAB. BOLAANG MONGONDOW TIMUR",
+    "KAB. BOLAANG MONGONDOW SELATAN",
+    "KOTA MANADO",
+    "KOTA BITUNG",
+    "KOTA TOMOHON",
+    "KOTA KOTAMOBAGU",
+    "KAB. BANGGAI",
+    "KAB. POSO",
+    "KAB. DONGGALA",
+    "KAB. TOLI TOLI",
+    "KAB. BUOL",
+    "KAB. MOROWALI",
+    "KAB. BANGGAI KEPULAUAN",
+    "KAB. PARIGI MOUTONG",
+    "KAB. TOJO UNA UNA",
+    "KAB. SIGI",
+    "KAB. BANGGAI LAUT",
+    "KAB. MOROWALI UTARA",
+    "KOTA PALU",
+    "KAB. KEPULAUAN SELAYAR",
+    "KAB. BULUKUMBA",
+    "KAB. BANTAENG",
+    "KAB. JENEPONTO",
+    "KAB. TAKALAR",
+    "KAB. GOWA",
+    "KAB. SINJAI",
+    "KAB. BONE",
+    "KAB. MAROS",
+    "KAB. PANGKAJENE DAN KEPULAUAN",
+    "KAB. BARRU",
+    "KAB. SOPPENG",
+    "KAB. WAJO",
+    "KAB. SIDENRENG RAPPANG",
+    "KAB. PINRANG",
+    "KAB. ENREKANG",
+    "KAB. LUWU",
+    "KAB. TANA TORAJA",
+    "KAB. LUWU UTARA",
+    "KAB. LUWU TIMUR",
+    "KAB. TORAJA UTARA",
+    "KOTA MAKASSAR",
+    "KOTA PAREPARE",
+    "KOTA PALOPO",
+    "KAB. KOLAKA",
+    "KAB. KONAWE",
+    "KAB. MUNA",
+    "KAB. BUTON",
+    "KAB. KONAWE SELATAN",
+    "KAB. BOMBANA",
+    "KAB. WAKATOBI",
+    "KAB. KOLAKA UTARA",
+    "KAB. KONAWE UTARA",
+    "KAB. BUTON UTARA",
+    "KAB. KOLAKA TIMUR",
+    "KAB. KONAWE KEPULAUAN",
+    "KAB. MUNA BARAT",
+    "KAB. BUTON TENGAH",
+    "KAB. BUTON SELATAN",
+    "KOTA KENDARI",
+    "KOTA BAU BAU",
+    "KAB. GORONTALO",
+    "KAB. BOALEMO",
+    "KAB. BONE BOLANGO",
+    "KAB. POHUWATO",
+    "KAB. GORONTALO UTARA",
+    "KOTA GORONTALO",
+    "KAB. PASANGKAYU",
+    "KAB. MAMUJU",
+    "KAB. MAMASA",
+    "KAB. POLEWALI MANDAR",
+    "KAB. MAJENE",
+    "KAB. MAMUJU TENGAH",
+    "KAB. MALUKU TENGAH",
+    "KAB. MALUKU TENGGARA",
+    "KAB. KEPULAUAN TANIMBAR",
+    "KAB. BURU",
+    "KAB. SERAM BAGIAN TIMUR",
+    "KAB. SERAM BAGIAN BARAT",
+    "KAB. KEPULAUAN ARU",
+    "KAB. MALUKU BARAT DAYA",
+    "KAB. BURU SELATAN",
+    "KOTA AMBON",
+    "KOTA TUAL",
+    "KAB. HALMAHERA BARAT",
+    "KAB. HALMAHERA TENGAH",
+    "KAB. HALMAHERA UTARA",
+    "KAB. HALMAHERA SELATAN",
+    "KAB. KEPULAUAN SULA",
+    "KAB. HALMAHERA TIMUR",
+    "KAB. PULAU MOROTAI",
+    "KAB. PULAU TALIABU",
+    "KOTA TERNATE",
+    "KOTA TIDORE KEPULAUAN",
+    "KAB. JAYAPURA",
+    "KAB. KEPULAUAN YAPEN",
+    "KAB. BIAK NUMFOR",
+    "KAB. SARMI",
+    "KAB. KEEROM",
+    "KAB. WAROPEN",
+    "KAB. SUPIORI",
+    "KAB. MAMBERAMO RAYA",
+    "KOTA JAYAPURA",
+    "KAB. MANOKWARI",
+    "KAB. FAK FAK",
+    "KAB. TELUK BINTUNI",
+    "KAB. TELUK WONDAMA",
+    "KAB. KAIMANA",
+    "KAB. MANOKWARI SELATAN",
+    "KAB. PEGUNUNGAN ARFAK",
+    "KAB. MERAUKE",
+    "KAB. BOVEN DIGOEL",
+    "KAB. MAPPI",
+    "KAB. ASMAT",
+    "KAB. NABIRE",
+    "KAB. PUNCAK JAYA",
+    "KAB. PANIAI",
+    "KAB. MIMIKA",
+    "KAB. PUNCAK",
+    "KAB. DOGIYAI",
+    "KAB. INTAN JAYA",
+    "KAB. DEIYAI",
+    "KAB. JAYAWIJAYA",
+    "KAB PEGUNUNGAN BINTANG",
+    "KAB. YAHUKIMO",
+    "KAB. TOLIKARA",
+    "KAB. MAMBERAMO TENGAH",
+    "KAB. YALIMO",
+    "KAB. LANNY JAYA",
+    "KAB. NDUGA",
+    "KAB. SORONG",
+    "KAB. SORONG SELATAN",
+    "KAB. RAJA AMPAT",
+    "KAB. TAMBRAUW",
+    "KAB. MAYBRAT",
+    "KOTA SORONG"
+  ];
+  var uptMap = {
+    "KOTA BANDUNG":"BBPOM di Bandung", "KAB. BANDUNG":"BBPOM di Bandung", "KAB. BANDUNG BARAT":"BBPOM di Bandung",
+    "KOTA BEKASI":"BBPOM di Bandung", "KAB. BEKASI":"BBPOM di Bandung",
+    "KOTA SURABAYA":"BBPOM di Surabaya", "KAB. SIDOARJO":"BBPOM di Surabaya",
+    "KOTA ADM. JAKARTA PUSAT":"BBPOM di Jakarta", "KOTA ADM. JAKARTA UTARA":"BBPOM di Jakarta",
+    "KOTA ADM. JAKARTA BARAT":"BBPOM di Jakarta", "KOTA ADM. JAKARTA SELATAN":"BBPOM di Jakarta",
+    "KOTA ADM. JAKARTA TIMUR":"BBPOM di Jakarta"
+  };
+  var uptFallback = "UPT belum dipetakan (menunggu data master)";
 
   var prosesOpts = [
     "Sterilisasi","Pasteurisasi","Pemanggangan","Pengeringan","Blansir","Blansir perendaman",
@@ -328,10 +874,12 @@
 
   function addRow(){
     rowIdCounter++;
-    rows.push({id: rowIdCounter, lokasi: '', proses: '', kategori: []});
+    rows.push({id: rowIdCounter, lokasi: '', alamat: '', proses: '', kategori: []});
     render();
   }
   function removeRow(id){ rows = rows.filter(function(r){ return r.id !== id; }); render(); }
+
+  function locKey(r){ return r.lokasi + '|' + r.alamat.trim().toLowerCase(); }
 
   function render(){
     var container = document.getElementById('rows-container');
@@ -343,20 +891,22 @@
       container.appendChild(empty);
     }
     rows.forEach(function(row, idx){
-      var isDup = rows.slice(0, idx).some(function(r){ return r.lokasi && r.proses && r.lokasi === row.lokasi && r.proses === row.proses; });
+      var isDup = rows.slice(0, idx).some(function(r){ return r.lokasi && r.proses && locKey(r) === locKey(row) && r.proses === row.proses; });
       var card = document.createElement('div');
       card.className = 'loc-card' + (isDup ? ' dup' : '');
+
+      var lokLabel = document.createElement('p');
+      lokLabel.className = 'field-label';
+      lokLabel.style.marginBottom = '4px';
+      lokLabel.textContent = 'Kabupaten / kota';
+      card.appendChild(lokLabel);
 
       var top = document.createElement('div');
       top.className = 'loc-top';
 
       var lokSel = document.createElement('select');
-      lokSel.innerHTML = '<option value="">Pilih lokasi</option>' + lokasiOpts.map(function(o){ return '<option' + (row.lokasi === o ? ' selected' : '') + '>' + o + '</option>'; }).join('');
+      lokSel.innerHTML = '<option value="">Pilih kabupaten / kota</option>' + lokasiOpts.map(function(o){ return '<option' + (row.lokasi === o ? ' selected' : '') + '>' + o + '</option>'; }).join('');
       lokSel.addEventListener('change', function(){ row.lokasi = lokSel.value; render(); });
-
-      var prosSel = document.createElement('select');
-      prosSel.innerHTML = '<option value="">Pilih proses produksi</option>' + prosesOpts.map(function(o){ return '<option' + (row.proses === o ? ' selected' : '') + '>' + o + '</option>'; }).join('');
-      prosSel.addEventListener('change', function(){ row.proses = prosSel.value; render(); });
 
       var delBtn = document.createElement('button');
       delBtn.className = 'icon-btn';
@@ -365,14 +915,38 @@
       delBtn.addEventListener('click', function(){ removeRow(row.id); });
 
       top.appendChild(lokSel);
-      top.appendChild(prosSel);
       top.appendChild(delBtn);
       card.appendChild(top);
+
+      var alamatLabel = document.createElement('p');
+      alamatLabel.className = 'field-label';
+      alamatLabel.style.margin = '2px 0 4px';
+      alamatLabel.textContent = 'Alamat lengkap';
+      card.appendChild(alamatLabel);
+
+      var alamatInput = document.createElement('input');
+      alamatInput.type = 'text';
+      alamatInput.placeholder = 'Alamat lengkap fasilitas produksi';
+      alamatInput.value = row.alamat;
+      alamatInput.addEventListener('input', function(){ row.alamat = alamatInput.value; });
+      alamatInput.addEventListener('blur', function(){ render(); });
+      card.appendChild(alamatInput);
+
+      var prosLabel = document.createElement('p');
+      prosLabel.className = 'field-label';
+      prosLabel.style.margin = '6px 0 4px';
+      prosLabel.textContent = 'Proses produksi utama';
+      card.appendChild(prosLabel);
+
+      var prosSel = document.createElement('select');
+      prosSel.innerHTML = '<option value="">Pilih proses produksi utama</option>' + prosesOpts.map(function(o){ return '<option' + (row.proses === o ? ' selected' : '') + '>' + o + '</option>'; }).join('');
+      prosSel.addEventListener('change', function(){ row.proses = prosSel.value; render(); });
+      card.appendChild(prosSel);
 
       if(isDup){
         var tag = document.createElement('p');
         tag.className = 'dup-tag';
-        tag.textContent = 'Kombinasi ini sudah ada di atas - tidak dihitung ulang';
+        tag.textContent = 'Kabupaten/kota + alamat + proses ini sudah ada di atas - tidak dihitung ulang';
         card.appendChild(tag);
       }
 
@@ -481,7 +1055,7 @@
     var uniqueCombos = [];
     rows.forEach(function(r){
       if(r.lokasi && r.proses){
-        var key = r.lokasi + '|' + r.proses;
+        var key = locKey(r) + '|' + r.proses;
         if(uniqueCombos.indexOf(key) === -1) uniqueCombos.push(key);
       }
     });
@@ -514,7 +1088,10 @@
     } else {
       var uptSet = [];
       rows.forEach(function(r){
-        if(r.lokasi && uptMap[r.lokasi] && uptSet.indexOf(uptMap[r.lokasi]) === -1) uptSet.push(uptMap[r.lokasi]);
+        if(r.lokasi){
+          var uptName = uptMap[r.lokasi] || uptFallback;
+          if(uptSet.indexOf(uptName) === -1) uptSet.push(uptName);
+        }
       });
       uptVal.textContent = uptSet.length ? uptSet.join(', ') : 'Menunggu lokasi dipilih';
       uptDet.textContent = 'Menyesuaikan tiap lokasi pabrik';
