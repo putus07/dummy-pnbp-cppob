@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Kalkulator Biaya Layanan PNBP - Direktorat Pengawasan Produksi Pangan Olahan (Dummy)</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/dist/tabler-icons.min.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <style>
   :root{
     --surface-0:#f4f5f7;
@@ -75,6 +76,14 @@
   .var-text .t{font-size:13px;font-weight:500;color:var(--text-primary);margin:0;}
   .var-text .s{font-size:11.5px;color:var(--text-muted);margin:2px 0 0;}
   .field-label{font-size:12px;color:var(--text-secondary);margin:0 0 6px;font-weight:500;}
+  .alamat-row{display:flex;gap:8px;align-items:flex-start;}
+  .geotag-btn{flex-shrink:0;height:38px;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+  .geotag-btn.located{border-color:#2f9e44;color:#2f9e44;}
+  .map-box{margin-top:8px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  .map-canvas{height:260px;width:100%;}
+  .latlng-bar{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:var(--surface-1);font-size:11.5px;color:var(--text-secondary);}
+  .geo-status{font-size:11.5px;color:var(--text-muted);margin:4px 0 0;}
+  .geo-required-tag{font-size:11.5px;color:#c0392b;background:#fdecea;padding:6px 10px;border-radius:var(--radius);margin-top:2px;}
 </style>
 </head>
 <body>
@@ -135,7 +144,7 @@
         </div>
       </div>
 
-      <!-- <div class="card">
+      <div class="card">
         <div class="info-head"><i class="ti ti-list-check"></i><p>Komponen perhitungan biaya</p></div>
         <p class="desc" style="margin-bottom:0;">Biaya dihitung berdasarkan 3 komponen utama</p>
         <div class="info-list">
@@ -143,7 +152,7 @@
           <div>Lorem ipsum dolor sit amet consectetur</div>
           <div>Lorem ipsum dolor sit amet</div>
         </div>
-      </div> -->
+      </div>
 
       <div class="card">
         <div class="info-head"><i class="ti ti-adjustments"></i><p>Variabel yang memengaruhi biaya</p></div>
@@ -188,6 +197,7 @@
   </p>
 </div>
 
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){
   var cppobTarif = {
@@ -723,6 +733,46 @@
     {code:"9605", name:"KAB. MAYBRAT"},
     {code:"9671", name:"KOTA SORONG"}
   ];
+  var provinsiOpts = [
+    {code:"11", name:"Aceh"},
+    {code:"12", name:"Sumatera Utara"},
+    {code:"13", name:"Sumatera Barat"},
+    {code:"14", name:"Riau"},
+    {code:"15", name:"Jambi"},
+    {code:"16", name:"Sumatera Selatan"},
+    {code:"17", name:"Bengkulu"},
+    {code:"18", name:"Lampung"},
+    {code:"19", name:"Kepulauan Bangka Belitung"},
+    {code:"21", name:"Kepulauan Riau"},
+    {code:"31", name:"DKI Jakarta"},
+    {code:"32", name:"Jawa Barat"},
+    {code:"33", name:"Jawa Tengah"},
+    {code:"34", name:"DI Yogyakarta"},
+    {code:"35", name:"Jawa Timur"},
+    {code:"36", name:"Banten"},
+    {code:"51", name:"Bali"},
+    {code:"52", name:"Nusa Tenggara Barat"},
+    {code:"53", name:"Nusa Tenggara Timur"},
+    {code:"61", name:"Kalimantan Barat"},
+    {code:"62", name:"Kalimantan Tengah"},
+    {code:"63", name:"Kalimantan Selatan"},
+    {code:"64", name:"Kalimantan Timur"},
+    {code:"65", name:"Kalimantan Utara"},
+    {code:"71", name:"Sulawesi Utara"},
+    {code:"72", name:"Sulawesi Tengah"},
+    {code:"73", name:"Sulawesi Selatan"},
+    {code:"74", name:"Sulawesi Tenggara"},
+    {code:"75", name:"Gorontalo"},
+    {code:"76", name:"Sulawesi Barat"},
+    {code:"81", name:"Maluku"},
+    {code:"82", name:"Maluku Utara"},
+    {code:"91", name:"Papua"},
+    {code:"92", name:"Papua Barat"},
+    {code:"93", name:"Papua Selatan"},
+    {code:"94", name:"Papua Tengah"},
+    {code:"95", name:"Papua Pegunungan"},
+    {code:"96", name:"Papua Barat Daya"}
+  ];
   var uptExactMap = {
     "1101":"Loka Pengawas Obat dan Makanan di Kota Subulussalam",
     "1104":"Balai Pengawas Obat dan Makanan di Kabupaten Aceh Tengah",
@@ -990,14 +1040,20 @@
 
   function addRow(){
     rowIdCounter++;
-    rows.push({id: rowIdCounter, lokasi: '', alamat: '', proses: '', kategori: []});
+    rows.push({id: rowIdCounter, provinsi: '', lokasi: '', alamat: '', proses: '', kategori: [], lat: null, lng: null, mapOpen: false});
     render();
   }
   function removeRow(id){ rows = rows.filter(function(r){ return r.id !== id; }); render(); }
+  var mapInstances = {};
 
   function locKey(r){ return r.lokasi + '|' + r.alamat.trim().toLowerCase(); }
 
   function render(){
+    Object.keys(mapInstances).forEach(function(id){
+      try{ mapInstances[id].remove(); }catch(e){}
+    });
+    mapInstances = {};
+    var pendingMapInits = [];
     var container = document.getElementById('rows-container');
     container.innerHTML = '';
     if(rows.length === 0){
@@ -1014,14 +1070,35 @@
       var lokLabel = document.createElement('p');
       lokLabel.className = 'field-label';
       lokLabel.style.marginBottom = '4px';
-      lokLabel.textContent = 'Kabupaten / kota';
+      lokLabel.textContent = 'Provinsi';
       card.appendChild(lokLabel);
+
+      var provSel = document.createElement('select');
+      provSel.innerHTML = '<option value="">Pilih provinsi</option>' + provinsiOpts.map(function(o){ return '<option value="' + o.code + '"' + (row.provinsi === o.code ? ' selected' : '') + '>' + o.name + '</option>'; }).join('');
+      provSel.addEventListener('change', function(){
+        row.provinsi = provSel.value;
+        row.lokasi = '';
+        render();
+      });
+      card.appendChild(provSel);
+
+      var lokLabel2 = document.createElement('p');
+      lokLabel2.className = 'field-label';
+      lokLabel2.style.margin = '8px 0 4px';
+      lokLabel2.textContent = 'Kabupaten / kota';
+      card.appendChild(lokLabel2);
 
       var top = document.createElement('div');
       top.className = 'loc-top';
 
       var lokSel = document.createElement('select');
-      lokSel.innerHTML = '<option value="">Pilih kabupaten / kota</option>' + lokasiOpts.map(function(o){ return '<option value="' + o.code + '"' + (row.lokasi === o.code ? ' selected' : '') + '>' + o.name + '</option>'; }).join('');
+      var filteredLokasi = row.provinsi ? lokasiOpts.filter(function(o){ return o.code.substring(0,2) === row.provinsi; }) : [];
+      if(!row.provinsi){
+        lokSel.disabled = true;
+        lokSel.innerHTML = '<option value="">Pilih provinsi dahulu</option>';
+      } else {
+        lokSel.innerHTML = '<option value="">Pilih kabupaten / kota</option>' + filteredLokasi.map(function(o){ return '<option value="' + o.code + '"' + (row.lokasi === o.code ? ' selected' : '') + '>' + o.name + '</option>'; }).join('');
+      }
       lokSel.addEventListener('change', function(){ row.lokasi = lokSel.value; render(); });
 
       var delBtn = document.createElement('button');
@@ -1046,7 +1123,53 @@
       alamatInput.value = row.alamat;
       alamatInput.addEventListener('input', function(){ row.alamat = alamatInput.value; });
       alamatInput.addEventListener('blur', function(){ render(); });
-      card.appendChild(alamatInput);
+
+      var geoBtn = document.createElement('button');
+      geoBtn.id = 'geobtn-' + row.id;
+      geoBtn.className = 'geotag-btn' + (row.lat ? ' located' : '');
+      geoBtn.innerHTML = '<i class="ti ti-map-pin"></i>' + (row.lat ? 'Titik terkunci' : 'Cari lokasi');
+      geoBtn.addEventListener('click', function(){
+        row.mapOpen = true;
+        render();
+        setTimeout(function(){ searchAddress(row); }, 50);
+      });
+
+      var alamatRow = document.createElement('div');
+      alamatRow.className = 'alamat-row';
+      alamatRow.appendChild(alamatInput);
+      alamatRow.appendChild(geoBtn);
+      card.appendChild(alamatRow);
+
+      if(row.mapOpen){
+        var mapBox = document.createElement('div');
+        mapBox.className = 'map-box';
+        var mapCanvas = document.createElement('div');
+        mapCanvas.className = 'map-canvas';
+        var mapId = 'map-' + row.id;
+        mapCanvas.id = mapId;
+        var latlngBar = document.createElement('div');
+        latlngBar.className = 'latlng-bar';
+        latlngBar.innerHTML = '<span id="latlng-' + row.id + '">' + (row.lat ? ('Lat: ' + row.lat.toFixed(6) + ', Long: ' + row.lng.toFixed(6)) : 'Klik peta untuk mengunci titik lokasi') + '</span>';
+        mapBox.appendChild(mapCanvas);
+        mapBox.appendChild(latlngBar);
+        card.appendChild(mapBox);
+
+        var geoStatus = document.createElement('p');
+        geoStatus.className = 'geo-status';
+        geoStatus.id = 'geostatus-' + row.id;
+        geoStatus.textContent = '';
+        card.appendChild(geoStatus);
+
+        pendingMapInits.push(row);
+      }
+
+      if(!row.lat || !row.lng){
+        var geoTag = document.createElement('p');
+        geoTag.id = 'geotag-' + row.id;
+        geoTag.className = 'geo-required-tag';
+        geoTag.textContent = 'Titik lokasi (lat/long) wajib diisi - klik "Cari lokasi" lalu klik peta untuk mengunci titik';
+        card.appendChild(geoTag);
+      }
 
       var prosLabel = document.createElement('p');
       prosLabel.className = 'field-label';
@@ -1144,7 +1267,98 @@
 
       container.appendChild(card);
     });
+    pendingMapInits.forEach(function(row){ initMapForRow(row); });
     recalc();
+  }
+
+  function initMapForRow(row){
+    var mapId = 'map-' + row.id;
+    var el = document.getElementById(mapId);
+    if(!el || typeof L === 'undefined') return;
+    var startLat = row.lat || -2.5;
+    var startLng = row.lng || 118;
+    var startZoom = row.lat ? 13 : 5;
+    var map = L.map(mapId).setView([startLat, startLng], startZoom);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; OpenStreetMap contributors',
+      maxZoom: 19
+    }).addTo(map);
+
+    var marker = row.lat ? L.marker([row.lat, row.lng], {draggable:true}).addTo(map) : null;
+    if(marker){
+      marker.on('dragend', function(){
+        var p = marker.getLatLng();
+        row.lat = p.lat; row.lng = p.lng;
+        updateLatLngLabel(row);
+      });
+    }
+
+    function placeMarker(latlng){
+      row.lat = latlng.lat; row.lng = latlng.lng;
+      if(marker){
+        marker.setLatLng(latlng);
+      } else {
+        marker = L.marker(latlng, {draggable:true}).addTo(map);
+        marker.on('dragend', function(){
+          var p = marker.getLatLng();
+          row.lat = p.lat; row.lng = p.lng;
+          updateLatLngLabel(row);
+        });
+      }
+      updateLatLngLabel(row);
+      updateGeoButtonState(row);
+      updateGeoRequiredTag(row);
+    }
+
+    map.on('click', function(e){ placeMarker(e.latlng); });
+    map._placeMarker = placeMarker;
+    setTimeout(function(){ map.invalidateSize(); }, 100);
+    mapInstances[row.id] = map;
+  }
+
+  function updateLatLngLabel(row){
+    var el = document.getElementById('latlng-' + row.id);
+    if(el) el.textContent = 'Lat: ' + row.lat.toFixed(6) + ', Long: ' + row.lng.toFixed(6);
+  }
+
+  function updateGeoButtonState(row){
+    var btn = document.getElementById('geobtn-' + row.id);
+    if(btn){
+      btn.className = 'geotag-btn located';
+      btn.innerHTML = '<i class="ti ti-map-pin"></i>Titik terkunci';
+    }
+  }
+
+  function updateGeoRequiredTag(row){
+    var tag = document.getElementById('geotag-' + row.id);
+    if(tag && tag.parentNode){ tag.parentNode.removeChild(tag); }
+    recalc();
+  }
+
+  function searchAddress(row){
+    var statusEl = document.getElementById('geostatus-' + row.id);
+    var kabkotaName = '';
+    var found = lokasiOpts.find(function(o){ return o.code === row.lokasi; });
+    if(found) kabkotaName = found.name.replace(/^KAB\.\s*/,'Kabupaten ').replace(/^KOTA\s*/,'Kota ');
+    var query = (row.alamat ? row.alamat + ', ' : '') + kabkotaName + ', Indonesia';
+    if(statusEl) statusEl.textContent = 'Mencari titik lokasi...';
+    fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query))
+      .then(function(res){ return res.json(); })
+      .then(function(results){
+        var map = mapInstances[row.id];
+        if(results && results.length > 0 && map){
+          var lat = parseFloat(results[0].lat);
+          var lng = parseFloat(results[0].lon);
+          map.setView([lat, lng], 15);
+          map._placeMarker({lat: lat, lng: lng});
+          if(statusEl) statusEl.textContent = 'Titik ditemukan otomatis - geser marker atau klik peta untuk koreksi.';
+        } else {
+          if(statusEl) statusEl.textContent = 'Alamat tidak ditemukan otomatis - klik peta secara manual untuk mengunci titik.';
+        }
+      })
+      .catch(function(){
+        if(statusEl) statusEl.textContent = 'Pencarian gagal (offline/limit) - klik peta secara manual untuk mengunci titik.';
+      });
   }
 
   function recalc(){
@@ -1169,8 +1383,10 @@
     var tipe = getSelectedFixed('tipe');
 
     var uniqueCombos = [];
+    var pendingGeo = false;
     rows.forEach(function(r){
       if(r.lokasi && r.proses){
+        if(!r.lat || !r.lng){ pendingGeo = true; return; }
         var key = locKey(r) + '|' + r.proses;
         if(uniqueCombos.indexOf(key) === -1) uniqueCombos.push(key);
       }
@@ -1186,6 +1402,9 @@
 
     if(!skala || !jenis){
       totalDet.textContent = 'Lengkapi skala usaha dan jenis permohonan';
+      totalVal.textContent = 'Rp -';
+    } else if(uniqueCombos.length === 0 && pendingGeo){
+      totalDet.textContent = 'Kunci titik lokasi (lat/long) pada tiap baris lokasi terlebih dahulu';
       totalVal.textContent = 'Rp -';
     } else if(uniqueCombos.length === 0){
       totalDet.textContent = 'Lengkapi minimal satu baris lokasi dan proses produksi';
