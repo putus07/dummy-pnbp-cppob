@@ -1040,7 +1040,7 @@
 
   function addRow(){
     rowIdCounter++;
-    rows.push({id: rowIdCounter, provinsi: '', lokasi: '', alamat: '', proses: '', kategori: [], lat: null, lng: null, mapOpen: false});
+    rows.push({id: rowIdCounter, provinsi: '', lokasi: '', alamat: '', proses: '', kategori: [], lat: null, lng: null, mapOpen: false, triggerSearch: false});
     render();
   }
   function removeRow(id){ rows = rows.filter(function(r){ return r.id !== id; }); render(); }
@@ -1130,8 +1130,8 @@
       geoBtn.innerHTML = '<i class="ti ti-map-pin"></i>' + (row.lat ? 'Titik terkunci' : 'Cari lokasi');
       geoBtn.addEventListener('click', function(){
         row.mapOpen = true;
+        row.triggerSearch = true;
         render();
-        setTimeout(function(){ searchAddress(row); }, 50);
       });
 
       var alamatRow = document.createElement('div');
@@ -1267,7 +1267,13 @@
 
       container.appendChild(card);
     });
-    pendingMapInits.forEach(function(row){ initMapForRow(row); });
+    pendingMapInits.forEach(function(row){
+      initMapForRow(row);
+      if(row.triggerSearch){
+        row.triggerSearch = false;
+        searchAddress(row);
+      }
+    });
     recalc();
   }
 
@@ -1340,8 +1346,14 @@
     var kabkotaName = '';
     var found = lokasiOpts.find(function(o){ return o.code === row.lokasi; });
     if(found) kabkotaName = found.name.replace(/^KAB\.\s*/,'Kabupaten ').replace(/^KOTA\s*/,'Kota ');
+
+    if(!row.alamat && !kabkotaName){
+      if(statusEl) statusEl.textContent = 'Pilih kabupaten/kota atau isi alamat dahulu, lalu klik "Cari lokasi" lagi - atau klik langsung di peta.';
+      return;
+    }
+
     var query = (row.alamat ? row.alamat + ', ' : '') + kabkotaName + ', Indonesia';
-    if(statusEl) statusEl.textContent = 'Mencari titik lokasi...';
+    if(statusEl) statusEl.textContent = 'Mencari titik lokasi untuk "' + query + '"...';
     fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&q=' + encodeURIComponent(query))
       .then(function(res){ return res.json(); })
       .then(function(results){
@@ -1349,7 +1361,7 @@
         if(results && results.length > 0 && map){
           var lat = parseFloat(results[0].lat);
           var lng = parseFloat(results[0].lon);
-          map.setView([lat, lng], 15);
+          map.flyTo([lat, lng], 15, {duration: 1});
           map._placeMarker({lat: lat, lng: lng});
           if(statusEl) statusEl.textContent = 'Titik ditemukan otomatis - geser marker atau klik peta untuk koreksi.';
         } else {
